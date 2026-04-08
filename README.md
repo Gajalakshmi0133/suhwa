@@ -94,7 +94,7 @@ Suhwa/
 
 🚫 This project is **privately owned**.
 
-© 2026 **Gajalakshmi **  
+© 2026 Gajalakshmi
 All Rights Reserved.
 
 ❗ Unauthorized copying, modification, or distribution is strictly prohibited.
@@ -103,9 +103,9 @@ All Rights Reserved.
 
 ## 👩‍💻 💖 Author
 
-<h3 align="center">✨ Gajalakshmi  ✨</h3>
+<h3>✨ Gajalakshmi  ✨</h3>
 
-<p align="center">
+<p>
 🎓 B.Sc Computer Science Student <br/>
 💡 AI | Web Dev | Innovation <br/>
 🚀 Building real-world impactful projects
@@ -113,14 +113,7 @@ All Rights Reserved.
 
 ---
 
-## 🌟 ⭐ Support
 
-<p align="center">
-If you like this project ❤️ <br/>
-⭐ Give it a star on GitHub ⭐
-</p>
-
----
 
 ## 📬 📩 Contact
 
@@ -128,4 +121,4 @@ If you like this project ❤️ <br/>
 
 ---
 
-<h3 align="center">💜 Made with Passion & AI 💜</h3>
+<h3>💜 Made with Passion & AI 💜</h3>
