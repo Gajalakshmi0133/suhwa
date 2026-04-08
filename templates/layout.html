@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#4A90E2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Suhwa - Advanced Real-time AI Sign Language Recognition and Translation. Bridging the gap for the hearing impaired with accurate ASL, ISL, BSL detection and learning tools.">
+    <meta name="keywords" content="Suhwa, Sign Language AI, AI Recognition, ASL detection, ISL translation, BSL interpreter, Real-time Translation, Hearing Impaired Accessibility, AI Sign Language Tutor, Video Call Translation">
+    <meta name="author" content="Suhwa AI Team">
+    <meta property="og:title" content="Suhwa | Real-time AI Sign Language Recognition & Translation">
+    <meta property="og:description" content="Revolutionizing communication for the hearing-impaired using state-of-the-art AI technology.">
+    <meta property="og:image" content="{{ url_for('static', filename='img/deaf_flag.png') }}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Suhwa | AI Sign Language Recognition & Translation</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/deaf_flag.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/deaf_flag.png') }}">
+    <link rel="canonical" href="{{ request.url }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Hide Google Translate branding while keeping the selector available via our dropdown */
+        .goog-logo-link { display: none !important; }
+        .goog-te-gadget img { display: none !important; }
+        .goog-te-combo { margin-left: 6px; }
+        
+        /* Aggressively hide the top translate banner and any injected iframes */
+        iframe.goog-te-banner-frame, 
+        .goog-te-banner-frame, 
+        .goog-te-banner-frame.skiptranslate,
+        iframe.goog-te-menu-frame,
+        .goog-te-menu-frame,
+        .goog-te-balloon-frame { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+
+        /* Hide translate dropdown chrome that can appear on the page */
+        #goog-gt-tt, .goog-tooltip, .goog-tooltip-frame, .goog-text-highlight { display: none !important; }
+        
+        /* Ensure page content isn't pushed down by the hidden banner */
+        html { top: 0 !important; }
+        body { top: 0 !important; position: static !important; }
+        
+        /* Extra selectors to catch any injected translate chrome */
+        iframe[src*="translate"], 
+        iframe[src*="translate.google"], 
+        iframe[src*="translate.goog"],
+        .skiptranslate > iframe { display: none !important; height: 0 !important; width: 0 !important; }
+    </style>
+</head>
+<body>
+    <!-- Topbar removed per user preference -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <div class="logo-wrapper me-2">
+                    <img src="{{ url_for('static', filename='img/deaf_flag.png') }}" alt="logo">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Suhwa</span>
+                    <span class="brand-tagline">AI Sign Recognition</span>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('detect') }}">Detect</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('community') }}">Community</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="learnDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Learn</a>
+                        <ul class="dropdown-menu" aria-labelledby="learnDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('learn') }}">AI Tutor</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('reference_gallery') }}">Visual Gallery</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('tutorials') }}">Tutorials</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Resources</a>
+                        <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('upload') }}">Upload Video</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('how_it_works') }}">How It Works</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('faqs') }}">FAQ</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('help') }}">Help Center</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Company</a>
+                        <ul class="dropdown-menu" aria-labelledby="companyDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('about') }}">About Us</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('team') }}">Our Team</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('services') }}">Services</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('contact') }}">Contact</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe me-1"></i> Language
+                        </a>
+                        <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="langDropdown">
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('original')">🇺🇸 English</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('ta')">🇮🇳 Tamil</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('ml')">🇮🇳 Malayalam</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('hi')">🇮🇳 Hindi</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('ko')">🇰🇷 Korean</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="setLanguage('zh-CN')">🇨🇳 Chinese</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                                <!-- dark mode switch removed per user request -->
+                
+                <ul class="navbar-nav">
+                    {% if session.get('user_id') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i>
+                                <span>{{ current_user.first_name or current_user.username if current_user else 'Profile' }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li class="dropdown-header">Account</li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt fa-sm fa-fw me-2 text-gray-400"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('change_password') }}"><i class="fas fa-key fa-sm fa-fw me-2 text-gray-400"></i> Change Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link me-2" href="{{ url_for('login') }}">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if not no_footer %}
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-top row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="{{ url_for('static', filename='img/deaf_flag.png') }}" alt="Suhwa Logo" class="footer-logo">
+                            <span class="ms-2 h3 mb-0 fw-bold gradient-text">Suhwa</span>
+                        </div>
+                        <p class="footer-desc">Revolutionizing communication for the hearing-impaired using state-of-the-art AI technology. Accurate, real-time, and accessible for everyone.</p>
+                        <div class="social-links mt-4">
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h5 class="footer-title">Platform</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('detect') }}">Live Detection</a></li>
+                        <li><a href="{{ url_for('learn') }}">Learning Hub</a></li>
+                        <li><a href="{{ url_for('tutorials') }}">Tutorials</a></li>
+                        <li><a href="{{ url_for('upload') }}">Upload Video</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h5 class="footer-title">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('about') }}">Our Story</a></li>
+                        <li><a href="{{ url_for('team') }}">Meet the Team</a></li>
+                        <li><a href="{{ url_for('services') }}">Our Services</a></li>
+                        <li><a href="{{ url_for('contact') }}">Get in Touch</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer-newsletter-card">
+                        <h5 class="footer-title">Join our Newsletter</h5>
+                        <p class="small mb-4">Get the latest updates on AI sign language advancements.</p>
+                        <form class="newsletter-form" id="newsletterForm">
+                            <div class="input-group">
+                                <input type="email" id="newsletterEmail" class="form-control" placeholder="Enter your email" required>
+                                <button class="btn btn-primary" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom mt-5 py-4 border-top border-secondary border-opacity-10">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0 small text-muted">&copy; <span id="footerYear"></span> Suhwa AI. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                        <div class="bottom-links">
+                            <a href="{{ url_for('privacy') }}" class="small text-muted text-decoration-none me-3">Privacy Policy</a>
+                            <a href="{{ url_for('terms') }}" class="small text-muted text-decoration-none">Terms of Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endif %}
+
+        <!-- Hidden translate container (kept out of navbar so only dropdown controls language) -->
+        <div id="google_translate_element" style="display:none"></div>
+
+        <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {
+                    pageLanguage: 'en',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                },
+                'google_translate_element'
+            );
+        }
+    
+        // Programmatically change language by setting googtrans cookie and reloading.
+        function setCookie(name, value, days, domain) {
+            var expires = '';
+            if (typeof days === 'number') {
+                var date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = '; expires=' + date.toUTCString();
+            }
+            var cookie = name + '=' + (value || '')  + expires + '; path=/';
+            if (domain) cookie += '; domain=' + domain;
+            document.cookie = cookie;
+        }
+
+        function setLanguage(lang) {
+            try {
+                var host = window.location.hostname;
+                var domain = null;
+                // prefer a leading-dot domain for broader scope when appropriate
+                if (host && host.indexOf('.') !== -1 && !/^(localhost|\d+\.\d+\.\d+\.\d+)$/.test(host)) {
+                    domain = '.' + host;
+                }
+
+                if (lang === 'original') {
+                    // expire cookie to clear translation
+                    setCookie('googtrans', '', -1);
+                    if (domain) setCookie('googtrans', '', -1, domain);
+                } else {
+                    var code = lang;
+                    var val = '/en/' + code;
+                    // set cookie both without and with domain to increase chance Google reads it
+                    setCookie('googtrans', val, 365);
+                    if (domain) setCookie('googtrans', val, 365, domain);
+                }
+
+                // Try to apply translation immediately; fall back to reload if not possible
+                var code = (lang === 'original') ? null : lang;
+                attemptImmediateTranslate(code).then(function(applied){
+                    if(!applied){
+                        setTimeout(function(){ location.reload(); }, 250);
+                    }
+                }).catch(function(){ setTimeout(function(){ location.reload(); }, 250); });
+            } catch (e) {
+                console.error('Language change failed', e);
+            }
+        }
+
+        // Try to apply translation immediately by initializing the widget and selecting the language
+        function attemptImmediateTranslate(code){
+            return new Promise(function(resolve){
+                try{
+                    // ensure the widget is initialized
+                    if(typeof google === 'undefined' || !google.translate){
+                        resolve(false); return;
+                    }
+
+                    // if clearing original
+                    if(!code){
+                        // try to find the combo and set to 'en'
+                        var combo = document.querySelector('.goog-te-combo');
+                        if(combo){ combo.value = 'en'; combo.dispatchEvent(new Event('change')); resolve(true); return; }
+                        resolve(false); return;
+                    }
+
+                    // wait for the combo to appear
+                    var attempts = 0;
+                    var iv = setInterval(function(){
+                        var combo = document.querySelector('.goog-te-combo');
+                        if(combo){
+                            try{
+                                combo.value = code;
+                                combo.dispatchEvent(new Event('change'));
+                                clearInterval(iv);
+                                resolve(true);
+                                return;
+                            }catch(e){ }
+                        }
+                        attempts++;
+                        if(attempts>8){ clearInterval(iv); resolve(false); }
+                    }, 250);
+                }catch(e){ resolve(false); }
+            });
+        }
+        </script>
+            <script type="text/javascript">
+            // Remove any Google Translate banners/iframes that Google injects
+            function removeGoogleTranslateUI() {
+                try {
+                    // remove known banner iframe/class
+                    var banners = document.querySelectorAll('.goog-te-banner-frame, iframe');
+                    banners.forEach(function(el){
+                        try {
+                            var src = el.getAttribute('src') || '';
+                            if (!src || src.indexOf('translate') !== -1) el.remove();
+                        } catch(e) {}
+                    });
+
+                    var elems = ['goog-gt-tt','goog-gt-tt', 'goog-gt-tt'];
+                    elems.forEach(function(id){ var el = document.getElementById(id); if(el) el.style.display='none'; });
+
+                    var nodes = document.querySelectorAll('[class^="goog-"], [id^="goog-"]');
+                    nodes.forEach(function(n){
+                        try { n.style.display = 'none'; } catch(e){}
+                    });
+                } catch(e) { console.debug('removeGoogleTranslateUI error', e); }
+            }
+
+            document.addEventListener('DOMContentLoaded', function(){
+                removeGoogleTranslateUI();
+                // repeat removal a few times in case Google injects later
+                setTimeout(removeGoogleTranslateUI, 500);
+                setTimeout(removeGoogleTranslateUI, 1500);
+                setInterval(removeGoogleTranslateUI, 3000);
+            });
+            </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <!-- GSAP for 3D/scroll animations -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+        <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+        {% block scripts %}{% endblock %}
+        <!-- dark mode script removed -->
+        <script>
+            document.getElementById('footerYear').textContent = new Date().getFullYear();
+            
+            // Newsletter Subscription Logic
+            const newsletterForm = document.getElementById('newsletterForm');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('newsletterEmail');
+                    const email = emailInput.value;
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    
+                    // Disable button and show loading state
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+                    try {
+                        const response = await fetch('/subscribe', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ email: email })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok) {
+                            alert(result.message || 'Subscribed successfully!');
+                            emailInput.value = '';
+                        } else {
+                            alert(result.message || 'Failed to subscribe. Please try again.');
+                        }
+                    } catch (error) {
+                        console.error('Subscription error:', error);
+                        alert('An error occurred. Please try again later.');
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                });
+            }
+        </script>
+        <script>
+        // Footer accordion: enable toggles on small screens
+        (function(){
+            function setupFooterAccordion(){
+                var cols = document.querySelectorAll('.suhwa-footer .footer-col');
+                cols.forEach(function(col){
+                    var btn = col.querySelector('.footer-toggle');
+                    if(!btn) return;
+                    // ensure initial aria state and open/closed based on viewport
+                    if(window.innerWidth <= 768){
+                        btn.setAttribute('aria-expanded', col.classList.contains('open'));
+                        btn.style.display = 'inline-block';
+                        btn.onclick = function(){
+                            var isOpen = col.classList.toggle('open');
+                            btn.setAttribute('aria-expanded', isOpen);
+                        };
+                        // start closed
+                        if(!col.classList.contains('open')) col.classList.remove('open');
+                    } else {
+                        btn.style.display = 'none';
+                        col.classList.add('open');
+                    }
+                });
+            }
+            document.addEventListener('DOMContentLoaded', setupFooterAccordion);
+            window.addEventListener('resize', setupFooterAccordion);
+        })();
+        </script>
+</body>
+</html>

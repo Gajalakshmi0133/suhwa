@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h1 class="fw-bold">Privacy Policy</h1>
+          <p class="text-muted">Last updated: December 2025</p>
+
+          <p>Suhwa ("we", "our", "the Service") collects and processes certain information to provide gesture collection, training and detection features. This Privacy Policy explains what data we collect, why we collect it, and how you can manage it.</p>
+
+          <h4>1. Information We Collect</h4>
+          <ul>
+            <li><strong>Account information:</strong> name, username, email, profile avatar, and optional profile fields you provide.</li>
+            <li><strong>Landmark data:</strong> anonymized hand landmark sequences you record via the <em>/collect</em> interface. These are saved locally in the application under the <code>dataset/sequences/</code> directory unless you export them yourself.</li>
+            <li><strong>Uploaded media:</strong> videos you upload for analysis; these are processed and deleted as configured by the app.</li>
+            <li><strong>Logs:</strong> optional diagnostic logs (landmark logging) if enabled by the server operator.</li>
+          </ul>
+
+          <h4>2. How We Use Data</h4>
+          <p>Data is used to provide detection, training, and debugging features. Landmark data and uploads may be used to train models locally if you run the included training scripts. We do not share data externally unless you explicitly export or upload it.</p>
+
+          <h4>3. Retention</h4>
+          <p>By default, data saved under the project directories remains on the host machine until deleted by the user or operator. Please remove any sensitive data you do not wish to keep.</p>
+
+          <h4>4. Security</h4>
+          <p>Suhwa is intended for local or privately hosted use. Secure your deployment and follow best practices: use HTTPS in production, restrict access to the server, and protect exported data.</p>
+
+          <h4>5. Your Rights</h4>
+          <p>You can request deletion of your account data by contacting the administrator of your Suhwa deployment. If you control the host, you can remove data directly from the filesystem.</p>
+
+          <h4>6. Contact</h4>
+          <p>If you have questions about privacy, contact the project administrator via the <a href="{{ url_for('contact') }}">Contact</a> page.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

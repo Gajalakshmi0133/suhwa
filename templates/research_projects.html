@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white position-relative">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-3">Innovation Hub</span>
+                <h1 class="display-3 fw-bold mb-3">Research Initiatives</h1>
+                <p class="lead opacity-75 mb-0">Pushing the boundaries of Computer Vision and Deep Learning to create more inclusive communication tools.</p>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block animate__animated animate__zoomIn">
+                <i class="fas fa-microscope display-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Research Card 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden card-hover animate__animated animate__fadeInUp">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary me-3">
+                            <i class="fas fa-microchip fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">Deep Landmark Modeling</h5>
+                    </div>
+                    <p class="text-muted small mb-4">Focusing on dense landmark representations to achieve signer-independent accuracy across diverse hand shapes and lighting conditions.</p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">Active</span>
+                        <a href="#" class="text-primary text-decoration-none fw-bold small">Read Abstract <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Card 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info me-3">
+                            <i class="fas fa-language fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">Cross-Lingual SLR</h5>
+                    </div>
+                    <p class="text-muted small mb-4">Investigating transfer learning techniques to adapt models from high-resource sign languages (ASL) to low-resource regional dialects.</p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2 rounded-pill">Phase 2</span>
+                        <a href="#" class="text-primary text-decoration-none fw-bold small">View Methodology <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Card 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning me-3">
+                            <i class="fas fa-eye fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">Real-time Gaze Tracking</h5>
+                    </div>
+                    <p class="text-muted small mb-4">Integrating eye-tracking with sign recognition to improve the context of translation, particularly for spatial signing elements.</p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2 rounded-pill">Prototype</span>
+                        <a href="#" class="text-primary text-decoration-none fw-bold small">Research Blog <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publications Section -->
+    <div class="mt-5 pt-5">
+        <h3 class="fw-bold mb-4"><i class="fas fa-book text-primary me-2"></i> Recent Publications</h3>
+        <div class="bg-white rounded-4 shadow-sm border p-4">
+            <div class="list-group list-group-flush">
+                <div class="list-group-item px-0 py-3 border-bottom">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="fw-bold mb-1">Towards Robust Real-Time Sign Language Recognition</h6>
+                            <p class="text-muted small mb-0">Published in International Conference on Computer Vision (ICCV) 2024</p>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-outline-primary btn-sm rounded-pill px-3">PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item px-0 py-3 border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="fw-bold mb-1">Multi-Modal Fusion for Continuous Sign Language Translation</h6>
+                            <p class="text-muted small mb-0">Published in IEEE CVPR 2023</p>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-outline-primary btn-sm rounded-pill px-3">PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-10px); box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

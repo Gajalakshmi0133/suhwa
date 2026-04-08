@@ -1,0 +1,1652 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    .chat-room-container {
+        display: flex;
+        height: calc(100vh - 100px);
+        gap: 0;
+        background: #f5f5f5;
+    }
+
+    .chat-sidebar-left {
+        width: 280px;
+        background: white;
+        border-right: 1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .sidebar-header {
+        padding: 1.2rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .sidebar-header h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .conversations-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem;
+    }
+
+    .conversation-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.25rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .conversation-item:hover {
+        background: #f5f5f5;
+    }
+
+    .conversation-item.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .conversation-item.active .conv-name,
+    .conversation-item.active .conv-preview {
+        color: white;
+    }
+
+    .conversation-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .conversation-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .conv-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .conv-preview {
+        font-size: 0.8rem;
+        color: #999;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 0.15rem;
+    }
+
+    .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: white;
+    }
+
+    .chat-room-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-room-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .chat-room-header small {
+        display: block;
+        opacity: 0.9;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+
+    .chat-room-back {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .chat-room-back:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    #encryptionStatus {
+        display: inline-block;
+        font-size: 0.85rem;
+        margin-left: 1rem;
+        padding: 0.35rem 0.75rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+    }
+
+    .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message-group {
+        margin-bottom: 1.2rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message-item {
+        display: flex;
+        margin-bottom: 0.5rem;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .message-item.own {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+
+    .message-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 65%;
+    }
+
+    .message-item.own .message-content {
+        align-items: flex-end;
+    }
+
+    .message-username {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 0.2rem;
+    }
+
+    .message-item.own .message-username {
+        color: #555;
+    }
+
+    .message-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+        margin-top: 0.2rem;
+    }
+
+    .message-item.own .message-avatar {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .message-bubble {
+        background: #f1f1f1;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        word-wrap: break-word;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        color: #333;
+    }
+
+    .message-item.own .message-bubble {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        color: #999;
+        margin-top: 0.25rem;
+    }
+
+    .message-item.own .message-time {
+        color: #888;
+    }
+
+    .empty-chat-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #999;
+    }
+
+    .empty-chat-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 0.5rem 0;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #667eea;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 60%, 100% {
+            opacity: 0.5;
+            transform: translateY(0);
+        }
+        30% {
+            opacity: 1;
+            transform: translateY(-10px);
+        }
+    }
+
+    .chat-input-area {
+        padding: 1.5rem;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .chat-input-area input {
+        flex: 1;
+        min-width: 150px;
+        max-width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        font-size: 0.95rem;
+        height: 45px;
+        box-sizing: border-box;
+    }
+
+    .chat-input-area input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .chat-action-btn {
+        background: #667eea !important;
+        border: none !important;
+        color: white !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        cursor: pointer !important;
+        font-size: 1.3rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 50px !important;
+        height: 50px !important;
+        min-width: 50px !important;
+        min-height: 50px !important;
+        flex-shrink: 0 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4) !important;
+        outline: none !important;
+    }
+
+    .chat-action-btn:hover {
+        background: #764ba2 !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5) !important;
+    }
+
+    .chat-action-btn:active {
+        transform: translateY(-1px) !important;
+    }
+
+    .chat-action-btn:focus {
+        outline: 2px solid #667eea !important;
+        outline-offset: 2px !important;
+    }
+
+    .chat-action-btn.recording {
+        background: #f5576c;
+        color: white;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.6;
+        }
+    }
+
+    .recording-indicator {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #f5576c;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        z-index: 2000;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-weight: 600;
+    }
+
+    .recording-indicator.active {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .recording-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+        animation: pulse 1s infinite;
+    }
+
+    .audio-message {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: #f1f1f1;
+        border-radius: 12px;
+        max-width: 300px;
+    }
+
+    .message-item.own .audio-message {
+        background: rgba(102, 126, 234, 0.2);
+    }
+
+    .audio-player {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .audio-player audio {
+        height: 30px;
+        max-width: 250px;
+    }
+
+    .video-message {
+        max-width: 400px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .video-message video {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .sticker-modal {
+        display: none;
+        position: fixed;
+        bottom: 120px;
+        right: 20px;
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        width: 320px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .sticker-modal.active {
+        display: block;
+    }
+
+    .sticker-categories {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 0.5rem;
+        overflow-x: auto;
+    }
+
+    .sticker-category-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        transition: transform 0.2s;
+    }
+
+    .sticker-category-btn:hover {
+        transform: scale(1.2);
+    }
+
+    .sticker-category-btn.active {
+        background: #f0f0f0;
+        border-radius: 6px;
+    }
+
+    .stickers-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+    }
+
+    .sticker-item {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+
+    .sticker-item:hover {
+        background: #f5f5f5;
+    }
+
+    .btn-send {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 25px !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4) !important;
+        outline: none !important;
+        height: 45px !important;
+    }
+
+    .btn-send:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5) !important;
+    }
+
+    .btn-send:active {
+        transform: translateY(-1px) !important;
+    }
+
+    .btn-send:focus {
+        outline: 2px solid #667eea !important;
+        outline-offset: 2px !important;
+    }
+
+    .chat-sidebar-right {
+        width: 300px;
+        background: white;
+        border-left: 1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .sidebar-section {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .sidebar-section h5 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #667eea;
+        margin: 0 0 1rem 0;
+    }
+
+    .room-members-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .member-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        transition: background 0.3s ease;
+    }
+
+    .member-item:hover {
+        background: #f5f5f5;
+    }
+
+    .member-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .member-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .member-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .member-status {
+        font-size: 0.75rem;
+        color: #999;
+    }
+
+    .sidebar-header-action {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .add-members-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .add-members-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #333;
+    }
+
+    .modal-close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #999;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+    }
+
+    .modal-close-btn:hover {
+        color: #333;
+    }
+
+    .search-box {
+        margin-bottom: 1.5rem;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.95rem;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .users-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .user-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .user-item:hover {
+        background: #f5f5f5;
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-right: 0.75rem;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .user-status {
+        font-size: 0.8rem;
+        color: #999;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end;
+    }
+
+    .modal-btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .modal-btn-cancel {
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .modal-btn-cancel:hover {
+        background: #e0e0e0;
+    }
+
+    .modal-btn-add {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .modal-btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    @media (max-width: 1024px) {
+        .chat-sidebar-left {
+            width: 240px;
+        }
+
+        .chat-sidebar-right {
+            display: none;
+        }
+
+        .message-content {
+            max-width: 75%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .chat-action-btn {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .chat-sidebar-left {
+            display: none;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+        }
+
+        .chat-room-container {
+            height: calc(100vh - 80px);
+        }
+
+        .chat-input-area {
+            padding: 1rem !important;
+            gap: 0.5rem !important;
+        }
+
+        .chat-action-btn {
+            width: 45px !important;
+            height: 45px !important;
+            min-width: 45px !important;
+            min-height: 45px !important;
+            font-size: 1rem !important;
+        }
+
+        .btn-send {
+            padding: 0.6rem 1rem !important;
+            font-size: 0.85rem !important;
+            height: 45px !important;
+        }
+
+        .sticker-modal {
+            width: 90vw !important;
+            right: 5vw !important;
+            bottom: 80px !important;
+        }
+    }
+</style>
+
+<div class="chat-room-container">
+    <!-- Left Sidebar with Conversations -->
+    <div class="chat-sidebar-left">
+        <div class="sidebar-header">
+            <h4>Chats</h4>
+        </div>
+        <div class="conversations-list" id="conversationsList">
+            <!-- Conversations will be injected here -->
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+        <div class="chat-room-header">
+            <div>
+                <h3 id="roomName">Room Name</h3>
+                <small id="roomDesc">Room description</small>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span id="encryptionStatus" title="Encryption status"></span>
+                <a href="{{ url_for('community') }}" class="chat-room-back">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Rooms
+                </a>
+            </div>
+        </div>
+
+        <div class="messages-container" id="messagesContainer">
+            <div class="empty-chat-state">
+                <i class="fas fa-comments"></i>
+                <p>No messages yet. Start the conversation!</p>
+            </div>
+        </div>
+
+        <div id="typingArea" style="display: none; padding: 0 1.5rem;">
+            <div class="typing-indicator">
+                <span id="typingUsername">Someone</span> is typing
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span id="typingTime" style="font-size: 0.75rem; color: #999; margin-left: 0.5rem;"></span>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="messageInput" placeholder="Type a message..." class="form-control">
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0;">
+                <button class="chat-action-btn" id="stickerBtn" title="Send sticker (👋)" aria-label="Send sticker">
+                    <i class="fas fa-smile"></i>
+                </button>
+                <button class="chat-action-btn" id="voiceBtn" title="Record voice message" aria-label="Record voice message">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="chat-action-btn" id="cameraBtn" title="Record video message" aria-label="Record video message">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="btn-send" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </div>
+        
+        <div class="sticker-modal" id="stickerModal">
+            <div class="sticker-categories" id="stickerCategories"></div>
+            <div class="stickers-grid" id="stickersGrid"></div>
+        </div>
+        
+        <div class="recording-indicator" id="recordingIndicator">
+            <span class="recording-dot"></span>
+            <span id="recordingTime">00:00</span>
+        </div>
+    </div>
+
+    <!-- Right Sidebar with Room Members -->
+    <div class="chat-sidebar-right">
+        <div class="sidebar-section">
+            <div class="sidebar-header-action">
+                <h5 style="margin: 0;">Members <span id="memberCount">0</span></h5>
+                <button class="add-members-btn" id="addMembersBtn">
+                    <i class="fas fa-plus"></i> Add
+                </button>
+            </div>
+            <div class="room-members-list" id="membersList">
+                <!-- Members will be injected here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Members Modal -->
+<div class="modal-overlay" id="addMembersModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add Members</h3>
+            <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="userSearchInput" placeholder="Search users...">
+        </div>
+        <div class="users-list" id="usersList">
+            <!-- Users will be injected here -->
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" id="modalCancelBtn">Cancel</button>
+            <button class="modal-btn modal-btn-add" id="modalAddBtn">Add Selected</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="/static/js/encryption.js"></script>
+<script>
+    const ROOM_ID = new URLSearchParams(window.location.search).get('room_id') || {{ room_id | tojson }};
+    const socket = io();
+    let currentUser = null;
+
+    console.log('Page loaded, ROOM_ID:', ROOM_ID);
+    
+    socket.on('connect', () => {
+        console.log('Socket.IO connected, ID:', socket.id);
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('Socket.IO disconnected');
+    });
+    
+    socket.on('connect_error', (error) => {
+        console.error('Socket.IO connection error:', error);
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        console.log('DOM Content Loaded, initializing...');
+        loadCurrentUser();
+        loadRoomInfo();
+        loadMessages();
+        loadConversations();
+        loadRoomMembers();
+        initializeStickerPicker();
+        setupEventListeners();
+        
+        const encryptionReady = await initializeEncryption();
+        displayEncryptionStatus(encryptionReady);
+    });
+
+    function loadCurrentUser() {
+        fetch('{{ url_for("api_current_user") }}')
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to fetch current user');
+                return r.json();
+            })
+            .then(data => {
+                console.log('Current user loaded:', data);
+                currentUser = data;
+                socket.emit('connect_user', {
+                    user_id: data.id,
+                    username: data.username,
+                    room_id: ROOM_ID
+                });
+                console.log('Joining room:', ROOM_ID);
+                socket.emit('join_room', { 
+                    room_id: ROOM_ID,
+                    user_id: data.id
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load user:', err);
+                alert('Error loading user. Please refresh the page.');
+            });
+    }
+
+    function loadRoomInfo() {
+        fetch(`{{ url_for("api_get_rooms") }}`)
+            .then(r => r.json())
+            .then(rooms => {
+                const room = rooms.find(r => r.id == ROOM_ID);
+                if (room) {
+                    document.getElementById('roomName').textContent = room.room_name;
+                    document.getElementById('roomDesc').textContent = room.description || 'A room for discussion';
+                }
+            })
+            .catch(err => console.error('Failed to load room info:', err));
+    }
+
+    function loadMessages() {
+        if (!ROOM_ID) {
+            console.error('ROOM_ID not set');
+            return;
+        }
+        
+        fetch(`{{ url_for("api_get_messages") }}?room_id=${ROOM_ID}`)
+            .then(r => {
+                console.log('Messages API response status:', r.status);
+                if (!r.ok) {
+                    throw new Error(`HTTP ${r.status}: Failed to fetch messages`);
+                }
+                return r.json();
+            })
+            .then(messages => {
+                console.log('Messages loaded:', messages);
+                const container = document.getElementById('messagesContainer');
+                if (!Array.isArray(messages) || messages.length === 0) {
+                    container.innerHTML = `<div class="empty-chat-state"><i class="fas fa-comments"></i><p>No messages yet. Start the conversation!</p></div>`;
+                } else {
+                    container.innerHTML = messages.map(msg => renderMessage(msg)).join('');
+                    setTimeout(() => {
+                        container.scrollTop = container.scrollHeight;
+                    }, 50);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load messages:', err);
+                document.getElementById('messagesContainer').innerHTML = `<div class="empty-chat-state"><i class="fas fa-exclamation-circle"></i><p>Error loading messages: ${err.message}</p></div>`;
+            });
+    }
+
+    function renderMessage(msg) {
+        const isOwn = msg.user_id === (currentUser ? currentUser.id : null);
+        const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const avatar = msg.username.charAt(0).toUpperCase();
+        
+        let messageContent = `<div class="message-bubble">${msg.message_text}</div>`;
+        
+        if (msg.message_type === 'audio' && msg.audio_url) {
+            messageContent = `
+                <div class="audio-message">
+                    <i class="fas fa-volume-up" style="color: #667eea;"></i>
+                    <div class="audio-player">
+                        <audio controls>
+                            <source src="${msg.audio_url}" type="audio/webm">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            `;
+        } else if (msg.message_type === 'video' && msg.video_url) {
+            messageContent = `
+                <div class="video-message">
+                    <video controls>
+                        <source src="${msg.video_url}" type="video/webm">
+                        Your browser does not support the video element.
+                    </video>
+                </div>
+            `;
+        }
+        
+        return `
+            <div class="message-item ${isOwn ? 'own' : ''}">
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    ${!isOwn ? `<div class="message-username">${msg.username}</div>` : ''}
+                    ${messageContent}
+                    <div class="message-time">${time}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function loadConversations() {
+        fetch(`{{ url_for("api_get_rooms") }}`)
+            .then(r => r.json())
+            .then(rooms => {
+                const list = document.getElementById('conversationsList');
+                if (!rooms || rooms.length === 0) {
+                    list.innerHTML = '<p style="padding: 1rem; color: #999; text-align: center;">No conversations</p>';
+                    return;
+                }
+                list.innerHTML = rooms.map(room => `
+                    <div class="conversation-item ${room.id == ROOM_ID ? 'active' : ''}" data-room-id="${room.id}" onclick="window.location.href='?room_id=${room.id}'">
+                        <div class="conversation-avatar">${room.room_name.charAt(0).toUpperCase()}</div>
+                        <div class="conversation-info">
+                            <div class="conv-name">${room.room_name}</div>
+                            <div class="conv-preview">${room.description || 'No description'}</div>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error('Failed to load conversations:', err));
+    }
+
+    function loadRoomMembers() {
+        fetch(`{{ url_for("api_get_room_members") }}?room_id=${ROOM_ID}`)
+            .then(r => r.json())
+            .then(members => {
+                const list = document.getElementById('membersList');
+                const count = document.getElementById('memberCount');
+                
+                count.textContent = members.length;
+                
+                if (!members || members.length === 0) {
+                    list.innerHTML = '<p style="padding: 1rem; color: #999; text-align: center;">No members</p>';
+                    return;
+                }
+                
+                list.innerHTML = members.map(member => `
+                    <div class="member-item">
+                        <div class="member-avatar">${member.username.charAt(0).toUpperCase()}</div>
+                        <div class="member-info">
+                            <div class="member-name">${member.username}</div>
+                            <div class="member-status">Member</div>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error('Failed to load members:', err));
+    }
+
+    let allUsers = [];
+    let selectedUsers = new Set();
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let videoChunks = [];
+    let isRecordingAudio = false;
+    let isRecordingVideo = false;
+    let recordingStartTime = null;
+    let recordingInterval = null;
+
+    const stickersData = {
+        'hand': ['👋', '✋', '🤚', '🖐️', '✌️', '🤞', '🫰', '🤟', '🤘', '🤙', '👍', '👎', '✊', '👊', '🤛', '🤜'],
+        'gesture': ['👏', '🙌', '👐', '🤲', '🤝', '🤜', '🤛', '👉', '👈', '👆', '👇', '☝️', '🫵', '🫶'],
+        'face': ['😊', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😌', '😌', '😔', '😒', '😠'],
+        'heart': ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '💕', '💞', '💓', '💗', '💖', '💘'],
+        'world': ['🌍', '🌎', '🌏', '🗺️', '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '⛺', '🏠', '🏡', '🏘️', '🏚️', '🏗️'],
+        'celebration': ['🎉', '🎊', '🎈', '🎀', '🎁', '✨', '🌟', '💫', '⭐', '🌠', '🎆', '🎇', '🎆', '🎇', '🎑', '🎎']
+    };
+
+    function initializeStickerPicker() {
+        const categories = document.getElementById('stickerCategories');
+        categories.innerHTML = Object.keys(stickersData).map(category => `
+            <button class="sticker-category-btn ${category === 'hand' ? 'active' : ''}" data-category="${category}">
+                ${category === 'hand' ? '👋' : category === 'gesture' ? '👏' : category === 'face' ? '😊' : category === 'heart' ? '❤️' : category === 'world' ? '🌍' : '🎉'}
+            </button>
+        `).join('');
+
+        document.querySelectorAll('.sticker-category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.sticker-category-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                renderStickers(e.target.dataset.category);
+            });
+        });
+
+        renderStickers('hand');
+    }
+
+    function renderStickers(category) {
+        const grid = document.getElementById('stickersGrid');
+        const stickers = stickersData[category] || [];
+        grid.innerHTML = stickers.map(sticker => `
+            <div class="sticker-item" data-sticker="${sticker}">${sticker}</div>
+        `).join('');
+
+        document.querySelectorAll('.sticker-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const input = document.getElementById('messageInput');
+                input.value += item.dataset.sticker;
+                input.focus();
+                closeStickerModal();
+            });
+        });
+    }
+
+    function openStickerModal() {
+        const modal = document.getElementById('stickerModal');
+        modal.classList.toggle('active');
+    }
+
+    function closeStickerModal() {
+        const modal = document.getElementById('stickerModal');
+        modal.classList.remove('active');
+    }
+
+    function openAddMembersModal() {
+        const modal = document.getElementById('addMembersModal');
+        modal.classList.add('active');
+        selectedUsers.clear();
+        loadAvailableUsers();
+    }
+
+    function closeAddMembersModal() {
+        const modal = document.getElementById('addMembersModal');
+        modal.classList.remove('active');
+        selectedUsers.clear();
+        document.getElementById('userSearchInput').value = '';
+    }
+
+    function loadAvailableUsers() {
+        fetch('{{ url_for("api_get_all_users") }}')
+            .then(r => r.json())
+            .then(users => {
+                allUsers = users;
+                renderUsersList(allUsers);
+            })
+            .catch(err => console.error('Failed to load users:', err));
+    }
+
+    function renderUsersList(users) {
+        const list = document.getElementById('usersList');
+        if (!users || users.length === 0) {
+            list.innerHTML = '<p style="color: #999; text-align: center;">No users available</p>';
+            return;
+        }
+        list.innerHTML = users.map(user => `
+            <div class="user-item">
+                <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                <div class="user-info">
+                    <div class="user-name">${user.username}</div>
+                    <div class="user-status">@${user.username}</div>
+                </div>
+                <input type="checkbox" class="checkbox user-checkbox" data-user-id="${user.id}" data-username="${user.username}">
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    selectedUsers.add(parseInt(e.target.dataset.userId));
+                } else {
+                    selectedUsers.delete(parseInt(e.target.dataset.userId));
+                }
+            });
+        });
+    }
+
+    function filterUsers(query) {
+        if (!query.trim()) {
+            renderUsersList(allUsers);
+            return;
+        }
+        const filtered = allUsers.filter(user => 
+            user.username.toLowerCase().includes(query.toLowerCase())
+        );
+        renderUsersList(filtered);
+    }
+
+    function addMembersToRoom() {
+        if (selectedUsers.size === 0) {
+            alert('Please select at least one user');
+            return;
+        }
+
+        const userIds = Array.from(selectedUsers);
+        fetch('{{ url_for("api_add_room_members") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                room_id: ROOM_ID,
+                user_ids: userIds
+            })
+        })
+        .then(r => {
+            if (!r.ok) throw new Error('Failed to add members');
+            return r.json();
+        })
+        .then(data => {
+            closeAddMembersModal();
+            loadRoomMembers();
+            socket.emit('members_updated', { room_id: ROOM_ID });
+        })
+        .catch(err => {
+            console.error('Error adding members:', err);
+            alert('Failed to add members');
+        });
+    }
+
+    function startAudioRecording() {
+        if (isRecordingAudio) {
+            stopAudioRecording();
+            return;
+        }
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                isRecordingAudio = true;
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+                recordingStartTime = Date.now();
+                
+                const voiceBtn = document.getElementById('voiceBtn');
+                voiceBtn.classList.add('recording');
+                const indicator = document.getElementById('recordingIndicator');
+                indicator.classList.add('active');
+
+                recordingInterval = setInterval(() => {
+                    const elapsed = Date.now() - recordingStartTime;
+                    const seconds = Math.floor(elapsed / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    document.getElementById('recordingTime').textContent = 
+                        `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                }, 100);
+
+                mediaRecorder.ondataavailable = (e) => {
+                    audioChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    sendAudioMessage(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+            })
+            .catch(err => {
+                console.error('Error accessing microphone:', err);
+                alert('Unable to access microphone. Please check permissions.');
+            });
+    }
+
+    function stopAudioRecording() {
+        if (mediaRecorder && isRecordingAudio) {
+            isRecordingAudio = false;
+            mediaRecorder.stop();
+            clearInterval(recordingInterval);
+            
+            const voiceBtn = document.getElementById('voiceBtn');
+            voiceBtn.classList.remove('recording');
+            const indicator = document.getElementById('recordingIndicator');
+            indicator.classList.remove('active');
+        }
+    }
+
+    function sendAudioMessage(audioBlob) {
+        const formData = new FormData();
+        formData.append('room_id', ROOM_ID);
+        formData.append('user_id', currentUser.id);
+        formData.append('username', currentUser.username);
+        formData.append('audio', audioBlob, 'voice_message.webm');
+
+        fetch('{{ url_for("api_send_voice_message") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                socket.emit('send_voice_message', {
+                    room_id: ROOM_ID,
+                    user_id: currentUser.id,
+                    username: currentUser.username,
+                    message_id: data.message_id,
+                    audio_url: data.audio_url
+                });
+                loadMessages();
+            }
+        })
+        .catch(err => console.error('Error sending voice message:', err));
+    }
+
+    function startVideoRecording() {
+        if (isRecordingVideo) {
+            stopVideoRecording();
+            return;
+        }
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(stream => {
+                isRecordingVideo = true;
+                videoChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+                recordingStartTime = Date.now();
+                
+                const cameraBtn = document.getElementById('cameraBtn');
+                cameraBtn.classList.add('recording');
+                const indicator = document.getElementById('recordingIndicator');
+                indicator.classList.add('active');
+
+                recordingInterval = setInterval(() => {
+                    const elapsed = Date.now() - recordingStartTime;
+                    const seconds = Math.floor(elapsed / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    document.getElementById('recordingTime').textContent = 
+                        `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                }, 100);
+
+                mediaRecorder.ondataavailable = (e) => {
+                    videoChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const videoBlob = new Blob(videoChunks, { type: 'video/webm' });
+                    sendVideoMessage(videoBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                alert('Unable to access camera. Please check permissions.');
+            });
+    }
+
+    function stopVideoRecording() {
+        if (mediaRecorder && isRecordingVideo) {
+            isRecordingVideo = false;
+            mediaRecorder.stop();
+            clearInterval(recordingInterval);
+            
+            const cameraBtn = document.getElementById('cameraBtn');
+            cameraBtn.classList.remove('recording');
+            const indicator = document.getElementById('recordingIndicator');
+            indicator.classList.remove('active');
+        }
+    }
+
+    function sendVideoMessage(videoBlob) {
+        const formData = new FormData();
+        formData.append('room_id', ROOM_ID);
+        formData.append('user_id', currentUser.id);
+        formData.append('username', currentUser.username);
+        formData.append('video', videoBlob, 'video_message.webm');
+
+        fetch('{{ url_for("api_send_video_message") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                socket.emit('send_video_message', {
+                    room_id: ROOM_ID,
+                    user_id: currentUser.id,
+                    username: currentUser.username,
+                    message_id: data.message_id,
+                    video_url: data.video_url
+                });
+                loadMessages();
+            }
+        })
+        .catch(err => console.error('Error sending video message:', err));
+    }
+
+    function setupEventListeners() {
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        document.getElementById('stickerBtn').addEventListener('click', openStickerModal);
+        document.getElementById('voiceBtn').addEventListener('click', startAudioRecording);
+        document.getElementById('cameraBtn').addEventListener('click', startVideoRecording);
+
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('stickerModal');
+            const stickerBtn = document.getElementById('stickerBtn');
+            if (!modal.contains(e.target) && !stickerBtn.contains(e.target)) {
+                closeStickerModal();
+            }
+        });
+
+        document.getElementById('addMembersBtn').addEventListener('click', openAddMembersModal);
+        document.getElementById('modalCloseBtn').addEventListener('click', closeAddMembersModal);
+        document.getElementById('modalCancelBtn').addEventListener('click', closeAddMembersModal);
+        document.getElementById('modalAddBtn').addEventListener('click', addMembersToRoom);
+
+        document.getElementById('userSearchInput').addEventListener('input', (e) => {
+            filterUsers(e.target.value);
+        });
+
+        document.getElementById('addMembersModal').addEventListener('click', (e) => {
+            if (e.target.id === 'addMembersModal') {
+                closeAddMembersModal();
+            }
+        });
+
+        socket.on('new_message', (data) => {
+            console.log('New message received:', data);
+            if (data.room_id == ROOM_ID) {
+                console.log('Message is for current room, loading messages');
+                loadMessages();
+            } else {
+                console.log('Message is for room', data.room_id, 'but current room is', ROOM_ID);
+            }
+        });
+
+        socket.on('user_typing', (data) => {
+            if (data.room_id == ROOM_ID) {
+                document.getElementById('typingArea').style.display = 'block';
+                document.getElementById('typingUsername').textContent = data.username;
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('typingTime').textContent = `(${timeStr})`;
+                setTimeout(() => {
+                    document.getElementById('typingArea').style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        socket.on('members_updated', (data) => {
+            if (data.room_id == ROOM_ID) {
+                loadRoomMembers();
+            }
+        });
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message) {
+            console.warn('Message is empty');
+            return;
+        }
+        
+        if (!ROOM_ID) {
+            console.error('Room ID not set');
+            alert('Error: Room ID not available');
+            return;
+        }
+        
+        if (!currentUser) {
+            console.error('Current user not loaded');
+            alert('Error: User not authenticated');
+            return;
+        }
+
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.disabled = true;
+
+        try {
+            if (suhwaEncryption.initialized) {
+                const encrypted = await suhwaEncryption.encryptMessage(message, currentUser.id);
+                if (encrypted) {
+                    socket.emit('send_encrypted_message', {
+                        room_id: ROOM_ID,
+                        user_id: currentUser.id,
+                        username: currentUser.username,
+                        encrypted_message: encrypted.encrypted,
+                        signature: encrypted.signature
+                    }, (response) => {
+                        console.log('Encrypted message sent response:', response);
+                        sendBtn.disabled = false;
+                    });
+                } else {
+                    console.warn('Encryption failed, falling back to unencrypted');
+                    socket.emit('send_message', {
+                        room_id: ROOM_ID,
+                        user_id: currentUser.id,
+                        username: currentUser.username,
+                        message_text: message
+                    }, (response) => {
+                        console.log('Message sent response:', response);
+                        sendBtn.disabled = false;
+                    });
+                }
+            } else {
+                socket.emit('send_message', {
+                    room_id: ROOM_ID,
+                    user_id: currentUser.id,
+                    username: currentUser.username,
+                    message_text: message
+                }, (response) => {
+                    console.log('Message sent response:', response);
+                    sendBtn.disabled = false;
+                });
+            }
+
+            input.value = '';
+            socket.emit('stop_typing', { room_id: ROOM_ID });
+        } catch (err) {
+            console.error('Error sending message:', err);
+            sendBtn.disabled = false;
+            alert('Failed to send message');
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,230 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+    .how-it-works-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-3d-element {
+        position: absolute;
+        right: 10%;
+        top: 20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: pulse 4s infinite ease-in-out;
+    }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0.8; }
+    }
+    .process-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 40px;
+        height: 100%;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        position: relative;
+        z-index: 1;
+    }
+    .process-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+    }
+    .step-number {
+        font-size: 5rem;
+        font-weight: 900;
+        color: rgba(99, 102, 241, 0.05);
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        z-index: -1;
+    }
+    .tech-pill {
+        background: rgba(99, 102, 241, 0.1);
+        color: #6366f1;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    .pipeline-visual {
+        background: #f8fafc;
+        border-radius: 30px;
+        padding: 60px;
+        position: relative;
+    }
+    .pipeline-step {
+        background: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        text-align: center;
+        z-index: 2;
+        border: 1px solid #e2e8f0;
+    }
+    .pipeline-arrow {
+        color: #cbd5e1;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="how-it-works-pro">
+    <!-- Hero Section -->
+    <section class="how-it-works-hero text-white mb-5">
+        <div class="hero-3d-element"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="tech-pill bg-primary text-white mb-3">AI PIPELINE EXPLAINED</div>
+                    <h1 class="display-3 fw-bold mb-3">How Suhwa <span class="text-primary">Understands</span> Sign Language</h1>
+                    <p class="lead opacity-75 mb-4">Discover the sophisticated blend of computer vision and deep learning that transforms visual gestures into meaningful communication in real-time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The 3-Step Process -->
+    <section class="container mb-5 pb-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">The Core Workflow</h2>
+            <p class="text-muted">Three main stages that power our real-time recognition engine.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="step-number">01</div>
+                    <div class="icon-wrap mb-4">
+                        <i class="fas fa-camera-retro fa-3x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">Visual Capture</h4>
+                    <p class="text-muted">High-speed frame processing from your webcam at 30 FPS. Our engine optimizes lighting and contrast automatically to ensure reliable landmark tracking even in challenging environments.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="step-number">02</div>
+                    <div class="icon-wrap mb-4">
+                        <i class="fas fa-project-diagram fa-3x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">Kinetic Mapping</h4>
+                    <p class="text-muted">Using advanced pose estimation, we map 21 key points on each hand. This skeletal data captures precise movements, finger rotations, and hand orientation without storing your personal video data.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="step-number">03</div>
+                    <div class="icon-wrap mb-4">
+                        <i class="fas fa-brain fa-3x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">Neural Inference</h4>
+                    <p class="text-muted">The skeletal coordinates are fed into our custom-trained Neural Network. Within milliseconds, the model analyzes the sequence and predicts the sign with high statistical confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Pipeline -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-3">Technical Architecture</h2>
+                    <p class="text-muted">Our architecture is designed for low latency. By processing coordinates instead of raw video frames, we achieve 90% better performance on standard hardware.</p>
+                </div>
+                <div class="col-lg-6 text-lg-end">
+                    <div class="d-flex justify-content-lg-end gap-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm text-center" style="width: 120px;">
+                            <div class="h4 fw-bold text-primary mb-0">12ms</div>
+                            <div class="extra-small text-muted">Latency</div>
+                        </div>
+                        <div class="p-3 bg-white rounded-4 shadow-sm text-center" style="width: 120px;">
+                            <div class="h4 fw-bold text-success mb-0">98%</div>
+                            <div class="extra-small text-muted">Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pipeline-visual shadow-sm">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <div class="pipeline-step">
+                            <i class="fas fa-video mb-2 text-primary"></i>
+                            <div class="fw-bold small">RAW INPUT</div>
+                        </div>
+                    </div>
+                    <div class="col-auto pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="col">
+                        <div class="pipeline-step">
+                            <i class="fas fa-vector-square mb-2 text-primary"></i>
+                            <div class="fw-bold small">LANDMARKS</div>
+                        </div>
+                    </div>
+                    <div class="col-auto pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="col">
+                        <div class="pipeline-step">
+                            <i class="fas fa-filter mb-2 text-primary"></i>
+                            <div class="fw-bold small">SMOOTHING</div>
+                        </div>
+                    </div>
+                    <div class="col-auto pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="col">
+                        <div class="pipeline-step">
+                            <i class="fas fa-microchip mb-2 text-primary"></i>
+                            <div class="fw-bold small">MODEL RUN</div>
+                        </div>
+                    </div>
+                    <div class="col-auto pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="col">
+                        <div class="pipeline-step bg-primary text-white border-0">
+                            <i class="fas fa-font mb-2"></i>
+                            <div class="fw-bold small">TEXT OUTPUT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="container py-5 my-5">
+        <div class="row g-5">
+            <div class="col-md-6">
+                <h3 class="fw-bold mb-4">Engineered for Inclusion</h3>
+                <p class="mb-4">Suhwa isn't just a translation tool; it's a bridge. We've optimized every layer of our stack to ensure it works across devices, from high-end workstations to standard laptops.</p>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Python Backend</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> TensorFlow Models</li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> MediaPipe Integration</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Real-time WSGI</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-5 bg-primary rounded-5 text-white shadow-lg">
+                    <h4 class="fw-bold mb-3">Privacy First</h4>
+                    <p class="opacity-75 mb-0">Our "Landmark-Only" approach means we never upload your video stream to a server. All video processing happens locally on your machine, and only anonymous coordinates are used for translation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

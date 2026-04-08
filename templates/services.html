@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-dark text-white overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                <h1 class="display-3 fw-bold mb-3">Enterprise Solutions</h1>
+                <p class="lead opacity-75 mb-5">Scaling accessibility through robust APIs, custom datasets, and real-time recognition infrastructure.</p>
+                <a href="#plans" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow">Explore Plans</a>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block animate__animated animate__zoomIn">
+                <i class="fas fa-cog-wide-connected display-1 opacity-25" style="font-size: 15rem;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Main Services -->
+    <div class="row g-4 mb-5 pb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-5 h-100 p-4 card-hover animate__animated animate__fadeInUp">
+                <div class="bg-primary bg-opacity-10 p-4 rounded-4 text-primary d-inline-block mb-4 shadow-sm" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-bolt fs-1"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Real-time Recognition</h4>
+                <p class="text-muted small">Optimized edge-processing for low-latency detection in education, healthcare, and retail environments.</p>
+                <ul class="list-unstyled small mt-4">
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> Sub-second latency</li>
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> High confidence filtering</li>
+                    <li><i class="fas fa-check2-circle text-success me-2"></i> Multi-signer support</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-5 h-100 p-4 card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="bg-info bg-opacity-10 p-4 rounded-4 text-info d-inline-block mb-4 shadow-sm" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-database fs-1"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Custom Data Pipelines</h4>
+                <p class="text-muted small">We build and label specialized datasets for regional sign dialects and technical vocabularies.</p>
+                <ul class="list-unstyled small mt-4">
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> Automated labeling tools</li>
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> Quality assurance layers</li>
+                    <li><i class="fas fa-check2-circle text-success me-2"></i> Dialect adaptation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="bg-success bg-opacity-10 p-4 rounded-4 text-success d-inline-block mb-4 shadow-sm" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-code fs-1"></i>
+                </div>
+                <h4 class="fw-bold mb-3">API & SDK Integration</h4>
+                <p class="text-muted small">Seamlessly integrate Suhwa into your existing web, mobile, or kiosk applications.</p>
+                <ul class="list-unstyled small mt-4">
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> RESTful API endpoints</li>
+                    <li class="mb-2"><i class="fas fa-check2-circle text-success me-2"></i> React & Flutter SDKs</li>
+                    <li><i class="fas fa-check2-circle text-success me-2"></i> WebSocket streaming</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <section id="plans" class="mt-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Flexible Plans</h2>
+            <p class="text-muted">Choose the perfect tier for your project's scale.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card border rounded-5 h-100 p-5 text-center shadow-sm">
+                    <h5 class="fw-bold mb-1">Developer</h5>
+                    <div class="display-4 fw-bold my-4">Free</div>
+                    <ul class="list-unstyled mb-5">
+                        <li class="mb-3 text-muted">1,000 API calls / month</li>
+                        <li class="mb-3 text-muted">Community Support</li>
+                        <li class="text-muted">Standard Latency</li>
+                    </ul>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-dark rounded-pill fw-bold py-2">Get Started</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-primary border-2 rounded-5 h-100 p-5 text-center shadow-lg position-relative">
+                    <span class="badge bg-primary position-absolute top-0 start-50 translate-middle px-4 py-2 rounded-pill">MOST POPULAR</span>
+                    <h5 class="fw-bold mb-1">Professional</h5>
+                    <div class="display-4 fw-bold my-4">$99<small class="fs-6 text-muted">/mo</small></div>
+                    <ul class="list-unstyled mb-5">
+                        <li class="mb-3 fw-semibold">50,000 API calls / month</li>
+                        <li class="mb-3 fw-semibold">Priority Email Support</li>
+                        <li class="fw-semibold">Low Latency Infrastructure</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary rounded-pill fw-bold py-2">Subscribe Now</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border rounded-5 h-100 p-5 text-center shadow-sm">
+                    <h5 class="fw-bold mb-1">Enterprise</h5>
+                    <div class="display-4 fw-bold my-4">Custom</div>
+                    <ul class="list-unstyled mb-5">
+                        <li class="mb-3 text-muted">Unlimited API calls</li>
+                        <li class="mb-3 text-muted">24/7 Dedicated Support</li>
+                        <li class="text-muted">On-premise deployment</li>
+                    </ul>
+                    <a href="{{ url_for('contact') }}" class="btn btn-dark rounded-pill fw-bold py-2">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .card-hover { transition: transform 0.3s ease; }
+    .card-hover:hover { transform: translateY(-10px); }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

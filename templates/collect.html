@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Data Collection</h2>
+  <p class="text-muted">Use this page to record labeled landmark sequences for training.</p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label">Label</label>
+        <input id="labelInput" class="form-control" placeholder="e.g. hello, thank, good">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Frames to record</label>
+        <input id="framesCount" class="form-control" type="number" value="30">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Interval ms</label>
+        <input id="intervalMs" class="form-control" type="number" value="100">
+      </div>
+      <div class="d-grid gap-2">
+        <button id="recordBtn" class="btn btn-primary">Record Sequence</button>
+        <button id="saveBtn" class="btn btn-success">Save Last Sequence</button>
+      </div>
+      <div class="mt-3" id="status"></div>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Preview</h5>
+      <img id="previewImg" src="/camera_feed" class="img-fluid rounded" style="max-height:360px; object-fit:cover;">
+      <h6 class="mt-2">Last captured subtitle</h6>
+      <div id="lastSubtitle" class="p-2 bg-light rounded">-</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(async () => {
+  const recordBtn = document.getElementById('recordBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const labelInput = document.getElementById('labelInput');
+  const framesCount = document.getElementById('framesCount');
+  const intervalMs = document.getElementById('intervalMs');
+  const status = document.getElementById('status');
+  const lastSubtitle = document.getElementById('lastSubtitle');
+
+  let lastSequence = null;
+
+  async function fetchFrameData() {
+    try {
+      const res = await fetch('/api/detect-stream', {cache: 'no-store'});
+      if (!res.ok) throw new Error('fetch failed');
+      const j = await res.json();
+      return j; // includes landmarks
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  recordBtn.addEventListener('click', async () => {
+    const label = labelInput.value.trim();
+    const count = parseInt(framesCount.value, 10) || 30;
+    const delay = parseInt(intervalMs.value, 10) || 100;
+    if (!label) { status.textContent = 'Please enter a label.'; return; }
+    status.textContent = 'Recording...';
+    const frames = [];
+    for (let i=0;i<count;i++){
+      const data = await fetchFrameData();
+      if (data && data.landmarks) {
+        frames.push(data.landmarks);
+        lastSubtitle.textContent = data.subtitle || '-';
+      } else {
+        // push zeros to keep shape
+        frames.push(new Array(63).fill(0));
+        lastSubtitle.textContent = 'No hand';
+      }
+      await new Promise(r => setTimeout(r, delay));
+    }
+    lastSequence = { label, frames };
+    status.textContent = `Recorded ${frames.length} frames for label '${label}'. Click Save to persist.`;
+  });
+
+  saveBtn.addEventListener('click', async () => {
+    if (!lastSequence) { status.textContent = 'No sequence to save.'; return; }
+    status.textContent = 'Saving...';
+    try {
+      const res = await fetch('/api/save-landmark-batch', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(lastSequence)
+      });
+      const j = await res.json();
+      if (j.success) {
+        status.textContent = 'Saved sequence: ' + (j.path || 'ok');
+        lastSequence = null;
+      } else {
+        status.textContent = 'Save failed: ' + (j.error || 'unknown');
+      }
+    } catch (e){
+      status.textContent = 'Save error';
+    }
+  });
+
+})();
+</script>
+
+{% endblock %}

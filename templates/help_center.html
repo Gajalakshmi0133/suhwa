@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 animate__animated animate__fadeInDown">
+                <h1 class="display-4 fw-bold mb-3">How can we help you?</h1>
+                <p class="lead mb-4 opacity-75">Search our knowledge base or browse categories below to find answers.</p>
+                <div class="position-relative mx-auto shadow-lg rounded-pill overflow-hidden" style="max-width: 600px;">
+                    <input type="text" class="form-control form-control-lg border-0 ps-4 py-3" placeholder="Search for help articles...">
+                    <button class="btn btn-dark position-absolute top-50 end-0 translate-middle-y me-2 rounded-pill px-4">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <!-- Help Category Cards -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4 card-hover animate__animated animate__fadeInUp">
+                    <div class="bg-primary bg-opacity-10 p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-gear fs-2 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold">Account & Security</h5>
+                    <p class="text-muted small">Manage your profile, password, and security settings.</p>
+                    <a href="#" class="btn btn-link text-primary text-decoration-none fw-bold p-0">Browse Articles</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4 card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="bg-success bg-opacity-10 p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-video fs-2 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold">Recognition Tips</h5>
+                    <p class="text-muted small">Improve accuracy with our lighting and setup guides.</p>
+                    <a href="#" class="btn btn-link text-success text-decoration-none fw-bold p-0">Browse Articles</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4 card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="bg-warning bg-opacity-10 p-4 rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-question-circle fs-2 text-warning text-dark"></i>
+                    </div>
+                    <h5 class="fw-bold">General FAQs</h5>
+                    <p class="text-muted small">Common questions about Suhwa features and billing.</p>
+                    <a href="{{ url_for('faqs') }}" class="btn btn-link text-warning text-dark text-decoration-none fw-bold p-0">View FAQs</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 pt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="bg-white rounded-5 shadow-sm p-5 border">
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <h2 class="fw-bold mb-3">Still need help?</h2>
+                            <p class="text-muted mb-4">Our support team is available 24/7 to help you with any issues or feedback you might have.</p>
+                            <div class="d-flex gap-3">
+                                <a href="/contact" class="btn btn-primary px-4 py-2 rounded-pill fw-bold">Contact Support</a>
+                                <a href="mailto:support@suhwa.ai" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-bold">Email Us</a>
+                            </div>
+                        </div>
+                        <div class="col-md-5 d-none d-md-block text-center">
+                            <i class="fas fa-comments-dots-fill display-1 text-primary opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .card-hover {
+        transition: transform 0.3s ease, shadow 0.3s ease;
+    }
+    .card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 .5rem 2rem rgba(0,0,0,.15)!important;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

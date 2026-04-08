@@ -1,0 +1,612 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div id="detectPage" class="detect-container-full mt-4" data-camera-sensitivity="{{ user.get('camera_sensitivity') if user else '' }}">
+  <div class="row g-3">
+    <!-- Left Column: Camera Feed -->
+    <div class="col-xl-7 col-lg-7">
+      <div class="video-large-wrap mb-4">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="output_canvas" style="position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none;"></canvas>
+        
+        <!-- Camera Overlays -->
+        <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark text-white">
+            <div id="statusBadge" class="d-flex align-items-center gap-2">
+                <span id="statusDot" class="badge bg-secondary">●</span>
+                <span id="statusText" class="small fw-bold">IDLE</span>
+            </div>
+        </div>
+      </div>
+
+      <!-- Suggestion Board -->
+      <div class="suggestion-board-horizontal">
+        <div class="suggestion-title">
+            <i class="fas fa-lightbulb text-warning"></i>
+            <span>Detection Guide & Tips</span>
+        </div>
+        <div class="row row-cols-2 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-sun"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Lighting</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Avoid backlighting; ensure light source is in front.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-hand-paper"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Frame</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Keep your hands centered at chest height.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-tachometer-alt"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Pace</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Sign clearly and maintain a steady, slow rhythm.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-couch"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Background</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Use a solid, non-cluttered background.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-arrows-alt-h"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Distance</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Stay approx. 3-4 feet away from the camera.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="suggestion-item border-0 p-2 bg-light rounded-3 h-100">
+                    <div class="suggestion-icon extra-small"><i class="fas fa-language"></i></div>
+                    <div>
+                        <div class="fw-bold extra-small">Dialect</div>
+                        <div class="text-muted extra-small" style="font-size: 0.6rem;">Ensure your selected dialect matches your signs.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- YOLO Alternative (New) -->
+      <div class="card border-0 shadow-sm p-4 mt-3 bg-white rounded-4 border-start border-warning border-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="fw-bold mb-1"><i class="fas fa-bolt text-warning me-2"></i>Try YOLOv11 Detection</h6>
+                <p class="text-muted extra-small mb-0">High-performance object detection with visual boxes</p>
+            </div>
+            <a href="{{ url_for('yolo_detect') }}" class="btn btn-warning btn-sm fw-bold px-3">Launch YOLO</a>
+        </div>
+      </div>
+
+      <!-- Session Control (Moved from right to left) -->
+      <div class="card border-0 shadow-sm p-4 mt-3 bg-white rounded-4">
+        <h6 class="fw-bold extra-small text-muted mb-3 text-uppercase"><i class="fas fa-cog me-2"></i>Session Control Center</h6>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <button id="startBtn" class="btn btn-success py-2 fw-bold"><i class="fas fa-play me-2"></i>Start Session</button>
+                    <button id="stopBtn" class="btn btn-danger py-2 fw-bold" disabled><i class="fas fa-stop me-2"></i>Stop Session</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <button id="webcamButton" class="btn btn-primary py-2 fw-bold"><i class="fas fa-video me-2"></i>Enable AI Camera</button>
+                    <button id="stopWebcamButton" class="btn btn-outline-secondary py-2 fw-bold" disabled>Disable AI Camera</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Dashboard Controls -->
+    <div class="col-xl-5 col-lg-5">
+      <div class="control-panel-pro d-flex flex-column gap-3">
+        
+        <!-- Interactive Session Stats -->
+        <div class="d-flex gap-2 mb-1">
+            <div class="stat-card-mini flex-grow-1">
+                <span class="label">SESSION TIME</span>
+                <span class="value" id="sessionTimer">00:00</span>
+            </div>
+            <div class="stat-card-mini flex-grow-1">
+                <span class="label">SIGNS COUNT</span>
+                <span class="value" id="signsCount">0</span>
+            </div>
+            <div class="stat-card-mini flex-grow-1">
+                <span class="label">AVG CONF</span>
+                <span class="value" id="avgConf">--%</span>
+            </div>
+        </div>
+
+        <!-- BIG CONSOLE AREA (RECOGNITION FEED) -->
+        <div class="console-big d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="text-white-50 extra-small m-0">RECOGNITION FEED</label>
+                <div class="d-flex align-items-center gap-2">
+                    <div id="signalStrength" class="signal-bars">
+                        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    </div>
+                    <span id="confidenceBadge" class="badge bg-dark">--</span>
+                </div>
+            </div>
+
+            <div class="subtitle-display-huge py-2" id="subtitleBox">
+                <span id="subtitleText" style="font-size: 2rem;">READY...</span>
+            </div>
+
+            <div class="mt-2 p-2 bg-dark rounded border border-secondary">
+                <label class="text-white-50 extra-small mb-1 d-block">SENTENCE BUILDER</label>
+                <div id="builtSentence" class="text-success fw-bold" style="font-size: 1.5rem; min-height: 2rem; font-family: monospace;"></div>
+            </div>
+
+            <!-- Recent Signs Strip -->
+            <div class="recent-signs-wrap mt-2">
+                <label class="text-white-50 extra-small mb-1 d-block">RECENT SIGNS</label>
+                <div id="recentSigns" class="d-flex gap-2 overflow-auto pb-1">
+                    <span class="badge bg-dark-soft border border-secondary text-white-50 px-2 py-1 extra-small">Waiting...</span>
+                </div>
+            </div>
+            
+            <div class="mt-3 flex-grow-1 d-flex flex-column">
+                <label class="text-white-50 extra-small mb-1">TRANSCRIPT LOG</label>
+                <div id="transcriptBox" class="transcript-console p-3 overflow-auto" style="height: 250px !important; font-size: 1rem;"></div>
+                <div class="mt-2 d-flex gap-2">
+                    <button id="saveBtn" class="btn btn-sm btn-primary flex-grow-1 extra-small"><i class="fas fa-save"></i> Save</button>
+                    <button id="downloadBtn" class="btn btn-sm btn-outline-light flex-grow-1 extra-small border-white-50"><i class="fas fa-file-download"></i> Export</button>
+                    <button id="clearBtn" class="btn btn-sm btn-outline-danger flex-grow-1 extra-small border-danger-subtle"><i class="fas fa-trash-alt"></i> Clear</button>
+                </div>
+            </div>
+
+            <!-- Integrated Dashboard Footer Controls (CRT Style) -->
+            <div class="mt-4 pt-4 border-top border-secondary-subtle">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="text-white-50 extra-small mb-2 text-uppercase d-block">Dialect & Output Configuration</label>
+                        <select id="languageSelect" class="form-select form-select-sm mb-2 extra-small border-secondary bg-dark text-success py-2">
+                            <option value="asl">ASL — American</option>
+                            <option value="yolo">YOLOv11 ASL — Advanced</option>
+                            <option value="bsl">BSL — British</option>
+                            <option value="isl">ISL — Indian</option>
+                            <option value="lsf">LSF — French</option>
+                            <option value="ksl">KSL — Korean</option>
+                            <option value="jsl">JSL — Japanese</option>
+                        </select>
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input bg-secondary border-secondary" type="checkbox" id="voiceToggle">
+                            <label class="form-check-label extra-small fw-bold text-white-50" for="voiceToggle">Voice Assistant Feedback</label>
+                        </div>
+                    </div>
+                    <div class="col-12 pt-3">
+                        <div class="d-flex justify-content-between extra-small mb-1">
+                            <span class="text-white-50">Min Confidence Threshold</span>
+                            <span id="confThresholdVal" class="fw-bold text-success">50%</span>
+                        </div>
+                        <input id="confThreshold" type="range" class="form-range custom-range-crt" min="0" max="100" value="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .bg-gradient-dark { background: linear-gradient(transparent, rgba(0,0,0,0.8)); }
+    .extra-small { font-size: 0.72rem; }
+    .text-white-50 { color: rgba(255,255,255,0.5) !important; }
+    .border-white-50 { border-color: rgba(255,255,255,0.2) !important; }
+    #transcriptBox { font-family: 'Consolas', monospace; white-space: pre-wrap; scrollbar-width: thin; scrollbar-color: #1a2a3a transparent; }
+    
+    .stat-card-mini { background: #fff; border-radius: 12px; padding: 10px; border: 1px solid #eee; display: flex; flex-direction: column; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .stat-card-mini .label { font-size: 0.6rem; color: #888; font-weight: 800; text-transform: uppercase; }
+    .stat-card-mini .value { font-size: 1rem; font-weight: 800; color: var(--primary); }
+    
+    .signal-bars { display: flex; gap: 2px; align-items: flex-end; height: 12px; }
+    .signal-bars .bar { width: 3px; background: #333; border-radius: 1px; }
+    .signal-bars .bar:nth-child(1) { height: 4px; }
+    .signal-bars .bar:nth-child(2) { height: 8px; }
+    .signal-bars .bar:nth-child(3) { height: 12px; }
+    .active-signal .bar { background: #00ff41 !important; box-shadow: 0 0 5px #00ff41; animation: bar-blink 0.5s infinite alternate; }
+    @keyframes bar-blink { from { opacity: 0.4; } to { opacity: 1; } }
+    
+    .bg-dark-soft { background: rgba(255,255,255,0.05); }
+    .recent-signs-wrap::-webkit-scrollbar { height: 4px; }
+    .recent-signs-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+</style>
+
+<!-- Detection Logic -->
+<script>
+(function () {
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const subtitleText = document.getElementById('subtitleText');
+  const transcriptBox = document.getElementById('transcriptBox');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const languageSelect = document.getElementById('languageSelect');
+  const confThreshold = document.getElementById('confThreshold');
+  const confThresholdVal = document.getElementById('confThresholdVal');
+  const confidenceBadge = document.getElementById('confidenceBadge');
+  const voiceToggle = document.getElementById('voiceToggle');
+  const clearBtn = document.getElementById('clearBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const signsCountEl = document.getElementById('signsCount');
+  const sessionTimerEl = document.getElementById('sessionTimer');
+  const avgConfEl = document.getElementById('avgConf');
+  const signalBars = document.getElementById('signalStrength');
+  const recentSignsBox = document.getElementById('recentSigns');
+  const builtSentenceEl = document.getElementById('builtSentence');
+
+  const DETECT_API = '/api/detect-stream';
+  const DEFAULT_POLL_MS = 700;
+  
+  let pollTimer = null;
+  let lastSubtitle = '';
+  let transcript = [];
+  let builtSentence = '';
+  let signsCount = 0;
+  let totalConf = 0;
+  let sessionStartTime = null;
+  let timerInterval = null;
+  window.voiceEnabled = false;
+
+  function updateTimer() {
+    if (!sessionStartTime) return;
+    const now = new Date();
+    const diff = Math.floor((now - sessionStartTime) / 1000);
+    const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+    const secs = (diff % 60).toString().padStart(2, '0');
+    sessionTimerEl.textContent = `${mins}:${secs}`;
+  }
+
+  // Restore settings
+  try {
+    const savedLang = localStorage.getItem('detect_language');
+    if (savedLang && languageSelect) languageSelect.value = savedLang;
+    if (localStorage.getItem('voice_output') === '1') {
+      voiceToggle.checked = true;
+      window.voiceEnabled = true;
+    }
+  } catch (e) {}
+
+  function setStatus(running) {
+    if (running) {
+      statusDot.className = 'badge bg-success pulse';
+      statusText.textContent = 'RUNNING';
+      statusText.className = 'small fw-bold text-success';
+    } else {
+      statusDot.className = 'badge bg-secondary';
+      statusText.textContent = 'IDLE';
+      statusText.className = 'small fw-bold text-muted';
+    }
+  }
+
+  async function fetchSubtitle() {
+    try {
+      const lang = languageSelect.value;
+      const resp = await fetch(`${DETECT_API}?lang=${encodeURIComponent(lang)}`, { cache: 'no-store' });
+      const data = await resp.json();
+      handlePredictionData(data);
+    } catch (err) {
+      console.error('fetchSubtitle error:', err);
+    }
+  }
+
+  function handlePredictionData(data) {
+    const text = (data && data.subtitle) ? String(data.subtitle).trim() : '';
+    const confRaw = (data && typeof data.confidence !== 'undefined') ? data.confidence : null;
+    const conf = confRaw === null ? null : Math.round(confRaw * 100);
+
+    // Pulse signal bars
+    if (text) {
+        signalBars.classList.add('active-signal');
+        setTimeout(() => signalBars.classList.remove('active-signal'), 600);
+    }
+
+    if (confidenceBadge) confidenceBadge.textContent = (conf === null) ? '--' : conf + '%';
+
+    if (!text) {
+        lastSubtitle = '';
+        return;
+    }
+
+    const thr = parseInt(confThreshold.value, 10) || 0;
+    if (conf !== null && conf < thr) {
+      if (text) subtitleText.innerHTML = `<span class="text-white-50 small">Low Confidence: ${text}</span>`;
+      return;
+    }
+
+    if (text && text !== lastSubtitle) {
+      showSubtitle(text);
+
+      // Handle Sentence Building
+      if (text === 'BACKSPACE') {
+        builtSentence = builtSentence.slice(0, -1);
+      } else if (text === ' ') {
+        builtSentence += ' ';
+      } else if (text.length === 1 || (text.length > 1 && !text.includes(' '))) {
+        // If it's a single char or a single word label (not a translated sentence)
+        // For alphabets, text will be 'A', 'B', etc.
+        // We take the first char if it's a letter/digit
+        const charToAdd = (text === ' ' ) ? ' ' : text;
+        if (charToAdd !== 'BACKSPACE') {
+            // If it's a single character label from our model
+            if (text.length === 1) {
+                builtSentence += text;
+            } else {
+                // If it's a word like "Hello" and we want to add it as a word
+                builtSentence += (builtSentence.length > 0 && builtSentence.slice(-1) !== ' ' ? ' ' : '') + text;
+            }
+        }
+      }
+      builtSentenceEl.textContent = builtSentence;
+      
+      // Update Stats
+      signsCount++;
+      signsCountEl.textContent = signsCount;
+      if (conf !== null) {
+          totalConf += conf;
+          avgConfEl.textContent = Math.round(totalConf / signsCount) + '%';
+      }
+
+      // Add to Recent Signs
+      const badge = document.createElement('span');
+      badge.className = 'badge bg-primary px-2 py-1 extra-small';
+      badge.textContent = text;
+      recentSignsBox.prepend(badge);
+      if (recentSignsBox.children.length > 5) recentSignsBox.lastChild.remove();
+
+      const t = new Date();
+      const stamp = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      transcript.push(`[${stamp}] ${text} (${conf === null ? '--' : conf + '%'})`);
+      updateTranscriptView();
+      lastSubtitle = text;
+
+      if (window.voiceEnabled) {
+        const ut = new SpeechSynthesisUtterance(text);
+        speechSynthesis.cancel();
+        speechSynthesis.speak(ut);
+      }
+    }
+  }
+
+  function showSubtitle(text) {
+    subtitleText.style.opacity = 0;
+    setTimeout(() => {
+      subtitleText.textContent = text;
+      subtitleText.style.opacity = 1;
+    }, 100);
+  }
+
+  function updateTranscriptView() {
+    transcriptBox.textContent = transcript.join('\n');
+    transcriptBox.scrollTop = transcriptBox.scrollHeight;
+  }
+
+  function startStream() {
+    sessionStartTime = new Date();
+    timerInterval = setInterval(updateTimer, 1000);
+    recentSignsBox.innerHTML = '';
+    
+    if (typeof window.enableCam === 'function') {
+      window.enableCam();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      setStatus(true);
+      return;
+    }
+    pollTimer = setInterval(fetchSubtitle, DEFAULT_POLL_MS);
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    setStatus(true);
+  }
+
+  function stopStream() {
+    clearInterval(timerInterval);
+    if (typeof window.stopCam === 'function') {
+      window.stopCam();
+    }
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    setStatus(false);
+  }
+
+  // Event Listeners
+  startBtn.addEventListener('click', startStream);
+  stopBtn.addEventListener('click', stopStream);
+  
+  confThreshold.addEventListener('input', () => {
+    confThresholdVal.textContent = confThreshold.value + '%';
+  });
+
+  languageSelect.addEventListener('change', () => {
+    localStorage.setItem('detect_language', languageSelect.value);
+  });
+
+  voiceToggle.addEventListener('change', () => {
+    window.voiceEnabled = voiceToggle.checked;
+    localStorage.setItem('voice_output', voiceToggle.checked ? '1' : '0');
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (transcript.length === 0) return;
+    const blob = new Blob([transcript.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Suhwa_Transcript_${new Date().getTime()}.txt`;
+    a.click();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    transcript = [];
+    builtSentence = '';
+    builtSentenceEl.textContent = '';
+    signsCount = 0;
+    totalConf = 0;
+    signsCountEl.textContent = '0';
+    avgConfEl.textContent = '--%';
+    recentSignsBox.innerHTML = '';
+    updateTranscriptView();
+  });
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      if (!lastSubtitle) return;
+      try {
+        const confText = confidenceBadge.textContent || '--';
+        const conf = confText === '--' ? null : parseInt(confText) / 100.0;
+        const resp = await fetch('/api/save-translation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: lastSubtitle, confidence: conf, raw: lastSubtitle })
+        });
+        const j = await resp.json();
+        if (j.success) {
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+            saveBtn.className = 'btn btn-sm btn-success flex-grow-1 extra-small';
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+                saveBtn.className = 'btn btn-sm btn-primary flex-grow-1 extra-small';
+            }, 2000);
+        }
+      } catch (e) { console.error(e); }
+    });
+  }
+
+  window.addEventListener('client-prediction', (e) => {
+    handlePredictionData(e.detail);
+  });
+
+})();
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
+
+const video = document.getElementById('webcam');
+const canvasElement = document.getElementById('output_canvas');
+const canvasCtx = canvasElement.getContext('2d');
+const enableBtn = document.getElementById('webcamButton');
+const stopBtn = document.getElementById('stopWebcamButton');
+const langSelect = document.getElementById('languageSelect');
+
+let handLandmarker = null;
+let webcamRunning = false;
+let runningMode = 'IMAGE';
+let lastVideoTime = -1;
+
+async function createHandLandmarker(){
+  const vision = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm');
+  handLandmarker = await HandLandmarker.createFromOptions(vision, {
+    baseOptions: {
+      modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+      delegate: 'GPU'
+    },
+    runningMode: runningMode,
+    numHands: 2
+  });
+}
+
+async function enableCam(){
+  if(!handLandmarker) {
+    enableBtn.disabled = true;
+    await createHandLandmarker();
+    enableBtn.disabled = false;
+  }
+
+  if (webcamRunning) return;
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: false });
+    video.srcObject = stream;
+    await video.play();
+    canvasElement.width = video.videoWidth;
+    canvasElement.height = video.videoHeight;
+    webcamRunning = true;
+    runningMode = 'VIDEO';
+    await handLandmarker.setOptions({ runningMode: 'VIDEO' });
+    enableBtn.disabled = true;
+    stopBtn.disabled = false;
+    renderLoop();
+  }catch(err){ console.error(err); }
+}
+
+async function stopCam(){
+  webcamRunning = false;
+  if(video.srcObject){
+    video.srcObject.getTracks().forEach(track => track.stop());
+    video.srcObject = null;
+  }
+  canvasCtx.clearRect(0,0, canvasElement.width, canvasElement.height);
+  enableBtn.disabled = false;
+  stopBtn.disabled = true;
+}
+
+window.enableCam = enableCam;
+window.stopCam = stopCam;
+
+enableBtn.addEventListener('click', enableCam);
+stopBtn.addEventListener('click', stopCam);
+
+async function renderLoop(){
+  if(!webcamRunning) return;
+  let startTimeMs = performance.now();
+  if(lastVideoTime !== video.currentTime){
+    lastVideoTime = video.currentTime;
+    const results = handLandmarker.detectForVideo(video, startTimeMs);
+    canvasCtx.save();
+    canvasCtx.clearRect(0,0, canvasElement.width, canvasElement.height);
+    if(results.landmarks){
+      for(const landmarks of results.landmarks){
+        window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, {color: "#00FF41", lineWidth: 3});
+        window.drawLandmarks(canvasCtx, landmarks, {color: "#FF0000", lineWidth: 1});
+      }
+      if(results.landmarks.length > 0){
+        sendLandmarks(results.landmarks);
+      } else {
+        // Clear current prediction if no hand seen for a few frames
+        window.dispatchEvent(new CustomEvent('client-prediction', {detail: {subtitle: '', confidence: 0}}));
+      }
+    }
+    canvasCtx.restore();
+  }
+  requestAnimationFrame(renderLoop);
+}
+
+async function sendLandmarks(landmarks){
+  try{
+    const resp = await fetch('/api/detect-stream', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({landmarks, lang: langSelect.value})
+    });
+    const data = await resp.json();
+    window.dispatchEvent(new CustomEvent('client-prediction', {detail: data}));
+  }catch(e){}
+}
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+{% endblock %}

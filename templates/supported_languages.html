@@ -1,0 +1,237 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+    .lang-card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+        background: #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .lang-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+    .lang-icon {
+        font-size: 2.5rem;
+        color: #3b82f6;
+        margin-bottom: 1.5rem;
+    }
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .status-active { background: #dcfce7; color: #166534; }
+    .status-beta { background: #fef9c3; color: #854d0e; }
+    .status-upcoming { background: #f1f5f9; color: #475569; }
+    
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 1rem;
+    }
+    .feature-list li {
+        padding-left: 1.5rem;
+        position: relative;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: #64748b;
+    }
+    .feature-list li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+    
+    .hero-section {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 5rem 0;
+        color: white;
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Global Accessibility</h1>
+        <p class="lead opacity-75 mx-auto" style="max-width: 700px;">
+            Suhwa bridges communication gaps across the globe. We continuously expand our support for regional sign languages and dialects.
+        </p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row g-4">
+        <!-- ASL -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-flag-usa"></i></div>
+                    <span class="status-badge status-active">Active</span>
+                </div>
+                <h4 class="fw-bold">American Sign Language</h4>
+                <p class="text-muted small">Full support for the primary sign language used in the United States and Canada.</p>
+                <ul class="feature-list">
+                    <li>Real-time recognition</li>
+                    <li>26 Alphabet support</li>
+                    <li>Common phrase detection</li>
+                    <li>Dynamic hand tracking</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ISL -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-flag"></i></div>
+                    <span class="status-badge status-active">Active</span>
+                </div>
+                <h4 class="fw-bold">Indian Sign Language</h4>
+                <p class="text-muted small">Tailored for the diverse regional variations across the Indian subcontinent.</p>
+                <ul class="feature-list">
+                    <li>Multi-regional dialects</li>
+                    <li>Hindi & English output</li>
+                    <li>Education-focused lexicon</li>
+                    <li>High-speed processing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- BSL -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-gb"></i></div>
+                    <span class="status-badge status-beta">Beta</span>
+                </div>
+                <h4 class="fw-bold">British Sign Language</h4>
+                <p class="text-muted small">Optimized for BSL's unique two-handed alphabet and grammatical structure.</p>
+                <ul class="feature-list">
+                    <li>Two-hand recognition</li>
+                    <li>Grammar-aware translation</li>
+                    <li>Contextual detection</li>
+                    <li>Daily usage vocabulary</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LSF -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-flag-french"></i></div>
+                    <span class="status-badge status-beta">Beta</span>
+                </div>
+                <h4 class="fw-bold">French Sign Language</h4>
+                <p class="text-muted small">Specialized detection for Langue des Signes Française (LSF).</p>
+                <ul class="feature-list">
+                    <li>Advanced facial tracking</li>
+                    <li>Regional LSF variations</li>
+                    <li>Native French output</li>
+                    <li>Synthetic dataset training</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- KSL -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-kr"></i></div>
+                    <span class="status-badge status-beta">Beta</span>
+                </div>
+                <h4 class="fw-bold">Korean Sign Language</h4>
+                <p class="text-muted small">Incorporating Hangeul finger-spelling and native gestures.</p>
+                <ul class="feature-list">
+                    <li>Hangeul finger-spelling</li>
+                    <li>Native speaker validation</li>
+                    <li>Korean text/audio output</li>
+                    <li>Real-time subtitles</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- JSL -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card lang-card p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="lang-icon"><i class="fas fa-jp"></i></div>
+                    <span class="status-badge status-beta">Beta</span>
+                </div>
+                <h4 class="fw-bold">Japanese Sign Language</h4>
+                <p class="text-muted small">Specialized for the unique semantic structure of Nihon Shuwa.</p>
+                <ul class="feature-list">
+                    <li>Kanji-based gestures</li>
+                    <li>Hiragana fingering</li>
+                    <li>Japanese audio synthesis</li>
+                    <li>High precision tracking</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 py-5 border-top">
+        <h2 class="fw-bold mb-4">Coming Soon</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-4">
+                    <div class="fs-2 text-muted"><i class="fas fa-globe-asia"></i></div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">Auslan</h6>
+                        <small class="text-muted">Australian Sign Language</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-4">
+                    <div class="fs-2 text-muted"><i class="fas fa-globe-americas"></i></div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">Libras</h6>
+                        <small class="text-muted">Brazilian Sign Language</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-4">
+                    <div class="fs-2 text-muted"><i class="fas fa-language"></i></div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">International</h6>
+                        <small class="text-muted">Gestuno Support</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="p-5 rounded-5 bg-primary bg-opacity-10">
+                <h3 class="fw-bold">Key Technologies</h3>
+                <div class="row g-4 mt-2">
+                    <div class="col-md-4">
+                        <h5 class="fw-bold text-primary">MediaPipe Integration</h5>
+                        <p class="small text-muted">Utilizing Google's high-fidelity hand and landmark tracking for sub-millisecond precision.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="fw-bold text-primary">LSTM Neural Networks</h5>
+                        <p class="small text-muted">Advanced sequence modeling to understand the fluid motion of continuous sign language sentences.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="fw-bold text-primary">Edge Processing</h5>
+                        <p class="small text-muted">Optimized models that run directly in your browser, ensuring privacy and low latency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

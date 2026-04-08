@@ -1,0 +1,453 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-primary text-white position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                <h1 class="display-3 fw-bold mb-3">Help & Support</h1>
+                <p class="lead opacity-75 mb-4">Master Suhwa with our comprehensive guides, interactive tutorials, and AI-powered support.</p>
+                <div class="d-flex gap-3">
+                    <div class="input-group input-group-lg shadow-lg rounded-pill overflow-hidden" style="max-width: 500px;">
+                        <span class="input-group-text border-0 bg-white"><i class="fas fa-search text-primary"></i></span>
+                        <input id="helpSearch" type="text" class="form-control border-0 py-3" placeholder="Search for help topics...">
+                    </div>
+                    <select id="langSelect" class="form-select form-select-lg w-auto rounded-pill border-0 shadow-lg px-4">
+                        <option value="en" selected>English</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="te">తెలుగు</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block animate__animated animate__fadeInRight">
+                <img src="https://img.freepik.com/free-vector/customer-support-flat-design-illustration_23-2148889374.jpg" alt="Support" class="img-fluid rounded-5 shadow-2xl">
+            </div>
+        </div>
+    </div>
+    <!-- Decorative background element -->
+    <div class="position-absolute top-0 end-0 p-5 opacity-10">
+        <i class="fas fa-question-circle" style="font-size: 20rem;"></i>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Left: Knowledge Base -->
+        <div class="col-lg-7">
+            <h3 class="fw-bold mb-4 d-flex align-items-center">
+                <i class="fas fa-book text-primary me-2"></i> Knowledge Base
+            </h3>
+            
+            <div class="accordion accordion-flush" id="helpAccordion">
+                <!-- Getting Started -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="getting started register login dashboard join account sign up suhwa help">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#gettingStarted">
+                            <i class="fas fa-rocket text-primary me-3"></i> Getting Started
+                        </button>
+                    </h2>
+                    <div id="gettingStarted" class="accordion-collapse collapse show" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <ol class="mb-0">
+                                <li class="mb-2"><strong>Register:</strong> Create your account using the sign-up form.</li>
+                                <li class="mb-2"><strong>Login:</strong> Access your personal dashboard securely.</li>
+                                <li><strong>Explore:</strong> Start using our detection tools immediately.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Detection -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="camera automatic subtitles live detect">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#liveDetect">
+                            <i class="fas fa-video text-primary me-3"></i> Live Camera Detection
+                        </button>
+                    </h2>
+                    <div id="liveDetect" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Our real-time engine processes video frames to generate instant subtitles. For best results:</p>
+                            <ul class="mb-3">
+                                <li>Maintain bright, even lighting.</li>
+                                <li>Ensure your hands are fully visible in the frame.</li>
+                                <li>Use a neutral, non-distracting background.</li>
+                            </ul>
+                            <img src="{{ url_for('static', filename='img/diag_camera.png') }}" alt="setup" class="img-fluid rounded-3 shadow-sm border" onerror="this.src='https://placehold.co/600x300?text=Camera+Setup+Guide'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Analysis -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="upload video analyze mp4 avi">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#videoAnalyze">
+                            <i class="fas fa-file-earmark-play text-primary me-3"></i> Video File Analysis
+                        </button>
+                    </h2>
+                    <div id="videoAnalyze" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Upload pre-recorded videos for high-accuracy translation.</p>
+                            <div class="d-flex align-items-center p-3 bg-white rounded-3 border">
+                                <i class="fas fa-info-circle-fill text-info fs-4 me-3"></i>
+                                <span>Supports MP4, AVI, MOV up to 200MB.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="faq questions accuracy languages tamil hindi malayalam telugu support translation">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#faqSection">
+                            <i class="fas fa-question-circle text-primary me-3"></i> Frequently Asked Questions
+                        </button>
+                    </h2>
+                    <div id="faqSection" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <div class="mb-3">
+                                <h6 class="fw-bold">How accurate is the system?</h6>
+                                <p class="small text-muted">Accuracy exceeds 95% in ideal conditions but varies with lighting and camera quality.</p>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold">Which languages are supported?</h6>
+                                <p class="small text-muted">We currently support ASL, ISL, BSL, and regional languages like Tamil, Hindi, Malayalam, and Telugu via translation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tutor & Learning -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="learn tutor lesson practice alphabet numbers study education">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#aiTutorHelp">
+                            <i class="fas fa-book text-primary me-3"></i> AI Tutor & Learning
+                        </button>
+                    </h2>
+                    <div id="aiTutorHelp" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Master sign language with our interactive AI-powered lessons.</p>
+                            <ul class="mb-0">
+                                <li><strong>Learning Mode:</strong> Step-by-step guides for alphabets and common words.</li>
+                                <li><strong>Practice Mode:</strong> Real-time feedback on your signing accuracy.</li>
+                                <li><strong>Revision:</strong> Revisit signs you've struggled with in the past.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account & Profile -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="profile avatar password settings account edit security">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#accountHelp">
+                            <i class="fas fa-user-gear text-primary me-3"></i> Account & Profile Management
+                        </button>
+                    </h2>
+                    <div id="accountHelp" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Manage your identity and security settings:</p>
+                            <ul class="mb-0">
+                                <li><strong>Avatar:</strong> Change your profile picture or use our preset characters.</li>
+                                <li><strong>Security:</strong> Update your password regularly in the settings panel.</li>
+                                <li><strong>Preferences:</strong> Set your default sign language (ASL, ISL, etc.).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Calls & Real-time Chat -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="video call meeting chat translate communication real-time link">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#callsHelp">
+                            <i class="fas fa-phone text-primary me-3"></i> Video Calls & Real-time Chat
+                        </button>
+                    </h2>
+                    <div id="callsHelp" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Communicate directly with others using integrated translation:</p>
+                            <ul class="mb-0">
+                                <li><strong>Start a Call:</strong> Generate a unique link to share with others.</li>
+                                <li><strong>Live Captions:</strong> See sign language translated into text during the call.</li>
+                                <li><strong>Screen Sharing:</strong> Share your workspace while maintaining the translation window.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data & Privacy -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="privacy data export sql history logs download security">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#dataHelp">
+                            <i class="fas fa-shield-alt text-primary me-3"></i> Data & Privacy
+                        </button>
+                    </h2>
+                    <div id="dataHelp" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>Your data is yours. We provide tools to manage and export it:</p>
+                            <ul class="mb-0">
+                                <li><strong>Export History:</strong> Download your detection history as a .txt file.</li>
+                                <li><strong>Data Portability:</strong> Export your account information in .sql format.</li>
+                                <li><strong>Clear Logs:</strong> Wipe your local detection and landmark logs at any time.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting & Performance -->
+                <div class="accordion-item border rounded-4 mb-3 overflow-hidden shadow-sm help-topic" data-tags="slow lag performance browser error fix lighting connection">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#troubleshootHelp">
+                            <i class="fas fa-tools text-primary me-3"></i> Troubleshooting & Performance
+                        </button>
+                    </h2>
+                    <div id="troubleshootHelp" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                        <div class="accordion-body bg-light bg-opacity-50">
+                            <p>If you're experiencing lag or detection errors:</p>
+                            <ul class="mb-0">
+                                <li><strong>Browser:</strong> Ensure you are using the latest version of Chrome or Edge.</li>
+                                <li><strong>Hardware:</strong> Enable 'Hardware Acceleration' in your browser settings.</li>
+                                <li><strong>Lighting:</strong> Avoid backlighting; ensure your face and hands are well-lit from the front.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: AI Assistant & Tools -->
+        <div class="col-lg-5">
+            <!-- Downloads Section -->
+            <div class="card border-0 shadow rounded-4 mb-4 overflow-hidden animate__animated animate__fadeInRight">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-download me-2"></i> Download Resources</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('download_guide') }}" class="list-group-item list-group-item-action d-flex align-items-center py-3 border-0 rounded-3 mb-2 bg-light bg-opacity-50">
+                            <i class="fas fa-file-pdf-fill text-danger fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">User Guide (PDF)</h6>
+                                <small class="text-muted">Master all features in 10 minutes</small>
+                            </div>
+                            <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                        </a>
+                        <a href="{{ url_for('export_history_txt') }}" class="list-group-item list-group-item-action d-flex align-items-center py-3 border-0 rounded-3 mb-2 bg-light bg-opacity-50">
+                            <i class="fas fa-file-text-fill text-info fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Detection Logs (.txt)</h6>
+                                <small class="text-muted">Export your recent translations</small>
+                            </div>
+                            <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chatbot -->
+            <div class="card border-0 shadow rounded-4 mb-4 overflow-hidden">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-robot me-2"></i> AI Assistant</h5>
+                </div>
+                <div class="card-body bg-light">
+                    <div id="chatWindow" class="mb-3 p-3 bg-white rounded-4 shadow-inner" style="height: 300px; overflow-y: auto;">
+                        <div class="mb-2">
+                            <span class="badge bg-primary px-3 py-2 rounded-pill mb-1">Suhwa Bot</span>
+                            <div class="p-3 bg-light rounded-4 small">Hello! I'm your AI assistant. Ask me anything about using Suhwa.</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input id="chatInput" type="text" class="form-control border-0 bg-white py-3 ps-4 shadow-sm" placeholder="Ask a question...">
+                        <button id="chatSend" class="btn btn-primary px-4"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Setup Wizard -->
+            <div class="card border-0 shadow rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="fas fa-wand-magic-sparkles text-warning me-2"></i> Setup Wizard
+                    </h5>
+                    <div class="wizard-steps position-relative ps-4">
+                        <div class="wizard-line position-absolute start-0 h-100 bg-light" style="width: 2px; top: 0; left: 10px !important;"></div>
+                        <ul id="wizardSteps" class="list-unstyled mb-4">
+                            <li class="mb-4 position-relative wizard-step active" data-step="0">
+                                <div class="step-dot position-absolute bg-primary rounded-circle" style="width: 12px; height: 12px; left: -25px; top: 6px;"></div>
+                                <h6 class="mb-1 fw-bold">Create Account</h6>
+                                <p class="small text-muted mb-0">Register with your email to get started.</p>
+                            </li>
+                            <li class="mb-4 position-relative wizard-step" data-step="1">
+                                <div class="step-dot position-absolute bg-light rounded-circle border border-2" style="width: 12px; height: 12px; left: -25px; top: 6px;"></div>
+                                <h6 class="mb-1 fw-bold text-muted">Dashboard Setup</h6>
+                                <p class="small text-muted mb-0">Customize your preferences in the dashboard.</p>
+                            </li>
+                            <li class="mb-4 position-relative wizard-step" data-step="2">
+                                <div class="step-dot position-absolute bg-light rounded-circle border border-2" style="width: 12px; height: 12px; left: -25px; top: 6px;"></div>
+                                <h6 class="mb-1 fw-bold text-muted text-truncate">Test Camera</h6>
+                                <p class="small text-muted mb-0">Run a quick camera test for recognition.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="nextStep" class="btn btn-outline-primary w-100 rounded-pill fw-bold">Next Step</button>
+                        <button id="resetWizard" class="btn btn-light rounded-pill px-4"><i class="fas fa-undo"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="card border-0 shadow rounded-4 bg-primary text-white">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-file-earmark-pdf display-4 mb-3 d-block"></i>
+                    <h5 class="fw-bold">Full User Guide</h5>
+                    <p class="small opacity-75 mb-4">Download our comprehensive PDF manual for offline reference.</p>
+                    <a href="{{ url_for('download_guide') }}" class="btn btn-light w-100 rounded-pill fw-bold py-2 shadow-sm" download>
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .shadow-inner { box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+    .accordion-button:not(.collapsed) { background-color: #f8f9ff; color: var(--bs-primary); }
+    .accordion-button:focus { box-shadow: none; }
+    .wizard-step.active h6 { color: var(--bs-primary) !important; }
+    .wizard-step.active .step-dot { transform: scale(1.5); transition: transform 0.3s ease; }
+    .card-hover:hover { transform: translateY(-5px); transition: transform 0.3s ease; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script>
+(() => {
+    // --- Search filter ---
+    const searchInput = document.getElementById('helpSearch');
+    const topics = Array.from(document.querySelectorAll('.help-topic'));
+    const accordion = document.getElementById('helpAccordion');
+    
+    // Create "no results" element
+    const noResults = document.createElement('div');
+    noResults.id = 'noResults';
+    noResults.className = 'text-center py-5 d-none';
+    noResults.innerHTML = `
+        <i class="fas fa-search display-1 text-muted opacity-25 mb-3"></i>
+        <h4 class="text-muted">No matching topics found</h4>
+        <p class="text-muted small">Try different keywords like "camera", "privacy", or "lessons"</p>
+        <button class="btn btn-outline-primary btn-sm rounded-pill mt-2" onclick="document.getElementById('helpSearch').value = ''; document.getElementById('helpSearch').dispatchEvent(new Event('input'));">Clear Search</button>
+    `;
+    accordion.after(noResults);
+    
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        let matchesFound = 0;
+        
+        topics.forEach(topic => {
+            if (!query) {
+                topic.classList.remove('d-none');
+                // Collapse all if query is cleared
+                const collapse = topic.querySelector('.accordion-collapse');
+                if (collapse && topic.id !== 'gettingStarted') { // keep first one open
+                    const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                    if (bsCollapse) bsCollapse.hide();
+                }
+                return;
+            }
+            
+            const tags = (topic.getAttribute('data-tags') || '').toLowerCase();
+            const title = (topic.querySelector('.accordion-button') || {}).textContent || '';
+            const body = (topic.querySelector('.accordion-body') || {}).textContent || '';
+            const content = (title + ' ' + body).toLowerCase();
+            
+            const isMatch = content.includes(query) || tags.includes(query);
+            
+            topic.classList.toggle('d-none', !isMatch);
+            
+            if (isMatch) {
+                matchesFound++;
+                const collapse = topic.querySelector('.accordion-collapse');
+                if (collapse) {
+                    const bsCollapse = bootstrap.Collapse.getInstance(collapse) || new bootstrap.Collapse(collapse, { toggle: false });
+                    bsCollapse.show();
+                }
+            }
+        });
+
+        noResults.classList.toggle('d-none', matchesFound > 0 || query === '');
+    });
+
+    // --- AI Chatbot ---
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+    const chatWindow = document.getElementById('chatWindow');
+
+    async function handleChat() {
+        const query = chatInput.value.trim();
+        if (!query) return;
+
+        appendMessage('User', query, 'bg-primary text-white ms-auto');
+        chatInput.value = '';
+
+        const thinkingId = 'thinking-' + Date.now();
+        appendMessage('Suhwa Bot', 'Thinking...', 'bg-light', thinkingId);
+        
+        try {
+            const lang = document.getElementById('langSelect').value;
+            const res = await fetch(`{{ url_for('api_chatbot') }}?q=${encodeURIComponent(query)}&lang=${lang}`);
+            const data = await res.json();
+            
+            document.getElementById(thinkingId).querySelector('.msg-text').textContent = data.answer;
+        } catch (err) {
+            document.getElementById(thinkingId).querySelector('.msg-text').textContent = "Connection error. Please try again.";
+        }
+    }
+
+    function appendMessage(sender, text, classes, id = '') {
+        const div = document.createElement('div');
+        div.className = `mb-3 ${sender === 'User' ? 'text-end' : ''}`;
+        if (id) div.id = id;
+        div.innerHTML = `
+            <span class="badge ${sender === 'User' ? 'bg-secondary' : 'bg-primary'} px-3 py-2 rounded-pill mb-1">${sender}</span>
+            <div class="p-3 ${classes} rounded-4 small msg-text" style="max-width: 85%; ${sender === 'User' ? 'margin-left: auto' : ''}">${text}</div>
+        `;
+        chatWindow.appendChild(div);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    chatSend.addEventListener('click', handleChat);
+    chatInput.addEventListener('keypress', e => e.key === 'Enter' && handleChat());
+
+    // --- Wizard ---
+    const wizardSteps = document.querySelectorAll('.wizard-step');
+    let currentStep = 0;
+
+    document.getElementById('nextStep').addEventListener('click', () => {
+        if (currentStep < wizardSteps.length - 1) {
+            wizardSteps[currentStep].classList.remove('active');
+            wizardSteps[currentStep].querySelector('.step-dot').className = 'step-dot position-absolute bg-success rounded-circle';
+            currentStep++;
+            wizardSteps[currentStep].classList.add('active');
+            wizardSteps[currentStep].querySelector('.step-dot').className = 'step-dot position-absolute bg-primary rounded-circle';
+            wizardSteps[currentStep].querySelector('h6').classList.remove('text-muted');
+        }
+    });
+
+    document.getElementById('resetWizard').addEventListener('click', () => {
+        wizardSteps.forEach((step, i) => {
+            step.classList.toggle('active', i === 0);
+            const dot = step.querySelector('.step-dot');
+            dot.className = i === 0 ? 'step-dot position-absolute bg-primary rounded-circle' : 'step-dot position-absolute bg-light rounded-circle border border-2';
+            if (i > 0) step.querySelector('h6').classList.add('text-muted');
+        });
+        currentStep = 0;
+    });
+})();
+</script>
+{% endblock %}

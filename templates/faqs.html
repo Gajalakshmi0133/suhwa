@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Frequently Asked Questions</h1>
+            <p class="lead text-muted">Everything you need to know about Suhwa</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion accordion-flush shadow-sm rounded" id="faqAccordion">
+                    
+                    <!-- General Questions -->
+                    <div class="accordion-item mb-3 border rounded">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                What is Suhwa?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Suhwa is a sign language recognition and translation platform designed to bridge communication gaps between sign language users and non-signers using real-time computer vision.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Issues -->
+                    <div class="accordion-item mb-3 border rounded">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                My camera isn't detected. What should I do?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                <ul class="mb-0">
+                                    <li>Check if your browser has permission to access the camera.</li>
+                                    <li>Ensure no other application (like Zoom or Teams) is using the camera.</li>
+                                    <li>Refresh the page and look for a camera icon in the address bar.</li>
+                                    <li>Try using a different browser (Chrome or Edge recommended).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="accordion-item mb-3 border rounded">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                Which languages are supported?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                We currently support several major sign languages including ASL, ISL, and more. You can check the full list on our <a href="{{ url_for('supported_languages') }}" class="text-primary text-decoration-none">Supported Languages</a> page.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accuracy -->
+                    <div class="accordion-item mb-3 border rounded">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                How accurate is the translation?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Our AI models are constantly improving. Accuracy depends on lighting conditions, background clarity, and the speed of signing. For best results, ensure you are in a well-lit area with a neutral background.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <p class="text-muted">Still have questions?</p>
+            <a href="mailto:support@suhwa.ai" class="btn btn-outline-primary px-4 py-2 rounded-pill">Contact Support</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .accordion-button:not(.collapsed) {
+        background-color: #f8f9fa;
+        color: var(--bs-primary);
+        box-shadow: none;
+    }
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(0,0,0,.125);
+    }
+    .accordion-item {
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

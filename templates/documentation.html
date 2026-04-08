@@ -1,0 +1,212 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse border-end overflow-auto shadow-sm" style="height: calc(100vh - 56px); position: sticky; top: 56px;">
+            <div class="position-sticky pt-4 px-3">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-muted text-uppercase fw-bold small">
+                    <span>Getting Started</span>
+                </h6>
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-semibold text-primary" href="#introduction">
+                            <i class="fas fa-info-circle me-2"></i> Introduction
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#quickstart">
+                            <i class="fas fa-rocket me-2"></i> Quickstart
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-muted text-uppercase fw-bold small">
+                    <span>API Reference</span>
+                </h6>
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#auth-api">
+                            <i class="fas fa-key me-2"></i> Authentication
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#detection-api">
+                            <i class="fas fa-microchip me-2"></i> Recognition API
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-muted text-uppercase fw-bold small">
+                    <span>SDKs & Tools</span>
+                </h6>
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#python-sdk">
+                            <i class="fas fa-filetype-py me-2"></i> Python SDK
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#javascript-sdk">
+                            <i class="fas fa-filetype-js me-2"></i> JavaScript SDK
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-5 bg-white">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+                <h1 class="h2 fw-bold">Documentation</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2">
+                        <i class="fas fa-download me-1"></i> Download PDF
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <i class="fab fa-github me-1"></i> Edit on GitHub
+                    </button>
+                </div>
+            </div>
+
+            <!-- Introduction -->
+            <section id="introduction" class="mb-5 animate__animated animate__fadeIn">
+                <h3 class="fw-bold mb-3">Introduction</h3>
+                <p class="lead text-muted">
+                    Welcome to the Suhwa documentation. Suhwa provides state-of-the-art sign language recognition APIs and tools to help developers build inclusive applications.
+                </p>
+                <div class="alert alert-info border-0 rounded-4 p-4 shadow-sm">
+                    <div class="d-flex">
+                        <i class="fas fa-lightbulb fs-3 me-3 text-info"></i>
+                        <div>
+                            <h6 class="fw-bold">Key Concept</h6>
+                            <p class="mb-0">Suhwa uses real-time computer vision and deep learning to translate sign language gestures into text or speech instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quickstart -->
+            <section id="quickstart" class="mb-5">
+                <h3 class="fw-bold mb-3">Quickstart</h3>
+                <p>Get started with our API in minutes. Here's a basic example using `curl` to analyze a video frame.</p>
+                
+                <div class="card bg-dark text-white rounded-4 overflow-hidden border-0 shadow-sm mb-4">
+                    <div class="card-header bg-dark border-bottom border-secondary d-flex justify-content-between align-items-center py-2 px-3">
+                        <span class="small text-uppercase fw-bold opacity-50">Bash</span>
+                        <button class="btn btn-link btn-sm text-white p-0 copy-btn">
+                            <i class="fas fa-clipboard me-1"></i> Copy
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <pre class="m-0 p-3"><code class="language-bash">curl -X POST https://api.suhwa.ai/v1/recognize \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "image=@frame.jpg" \
+  -F "language=asl"</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Details -->
+            <section id="detection-api" class="mb-5">
+                <h3 class="fw-bold mb-3">Recognition API</h3>
+                <p>Our core API endpoint for real-time sign language recognition.</p>
+                
+                <table class="table table-hover border rounded-4 overflow-hidden shadow-sm">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0 px-4">Parameter</th>
+                            <th class="border-0">Type</th>
+                            <th class="border-0">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 fw-bold"><code>image</code></td>
+                            <td>File</td>
+                            <td>The image frame to analyze (JPEG/PNG).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 fw-bold"><code>language</code></td>
+                            <td>String</td>
+                            <td>ISO code of the sign language (e.g., <code>asl</code>, <code>isl</code>).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 fw-bold"><code>threshold</code></td>
+                            <td>Float</td>
+                            <td>Confidence threshold (0.0 to 1.0). Default: 0.5.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</div>
+
+<style>
+    .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+    }
+    .sidebar .nav-link:hover {
+        background-color: #f8f9fa;
+        color: var(--bs-primary);
+    }
+    .sidebar .nav-link.active {
+        background-color: #eef2ff;
+        color: var(--bs-primary);
+    }
+    pre code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.9rem;
+    }
+    section h3 {
+        padding-top: 20px;
+        margin-top: -20px;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script>
+    // Copy Code Button Functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.closest('.card').querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check2 me-1"></i> Copied!';
+                this.classList.replace('text-white', 'text-success');
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.replace('text-success', 'text-white');
+                }, 2000);
+            });
+        });
+    });
+
+    // Simple smooth scroll for sidebar links
+    document.querySelectorAll('#sidebarMenu a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                // Update active state
+                document.querySelectorAll('#sidebarMenu a').forEach(a => a.classList.remove('active', 'fw-semibold', 'text-primary'));
+                this.classList.add('active', 'fw-semibold', 'text-primary');
+            }
+        });
+    });
+</script>
+{% endblock %}

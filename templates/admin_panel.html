@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suhwa Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar { min-height: 100vh; background: #343a40; color: white; padding-top: 20px; }
+        .sidebar a { color: #adb5bd; text-decoration: none; display: block; padding: 10px 20px; }
+        .sidebar a:hover, .sidebar a.active { color: white; background: #495057; }
+        .main-content { padding: 20px; }
+        .table-responsive { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <h4 class="text-center mb-4">Suhwa Admin</h4>
+                <a href="{{ url_for('admin_dashboard') }}" class="{% if not active_table %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+                <hr>
+                <h6 class="px-3 text-muted">Tables</h6>
+                {% for table in tables %}
+                <a href="{{ url_for('admin_table', table_name=table) }}" class="{% if active_table == table %}active{% endif %}">
+                    <i class="fas fa-table me-2"></i> {{ table }}
+                </a>
+                {% endfor %}
+                <hr>
+                <a href="{{ url_for('admin_logout') }}" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                <hr>
+                <a href="{{ url_for('index') }}"><i class="fas fa-arrow-left me-2"></i> Back to Site</a>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">{% if active_table %}Table: {{ active_table }}{% else %}Admin Dashboard{% endif %}</h1>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% if active_table %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                {% for col in columns %}
+                                <th>{{ col }}</th>
+                                {% endfor %}
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                            <tr>
+                                {% for col in columns %}
+                                <td>
+                                    {% if col == 'password' or col == 'password_hash' %}
+                                    <span class="text-muted">********</span>
+                                    {% else %}
+                                    {{ row[col] }}
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary btn-edit" data-row-index="{{ loop.index0 }}"><i class="fas fa-edit"></i></button>
+                                        <form action="{{ url_for('admin_delete', table_name=active_table, row_id=row['id']) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Simple Edit Modal -->
+                <div class="modal fade" id="editModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="{{ url_for('admin_update', table_name=active_table) }}" method="POST">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Record</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div id="modal-body" class="modal-body">
+                                    <!-- Dynamic fields -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <p class="card-text h2">{{ stats.get('user', 0) + stats.get('users', 0) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Detections</h5>
+                                <p class="card-text h2">{{ stats.get('detection_history', 0) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Messages</h5>
+                                <p class="card-text h2">{{ stats.get('contact_messages', 0) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-light border">
+                    Select a table from the sidebar to view and manage data.
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const tableData = {
+            rowData: JSON.parse('{{ (rows_json or "[]") | safe }}'),
+            columns: JSON.parse('{{ (columns or []) | tojson | safe }}')
+        };
+        
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-edit');
+            if (btn) {
+                const index = parseInt(btn.dataset.rowIndex);
+                editRow(index);
+            }
+        });
+        
+        function editRow(index) {
+            const row = tableData.rowData[index];
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = '';
+            
+            tableData.columns.forEach(col => {
+                const div = document.createElement('div');
+                div.className = 'mb-3';
+                
+                const label = document.createElement('label');
+                label.className = 'form-label';
+                label.innerText = col;
+                
+                const input = document.createElement('input');
+                input.className = 'form-control';
+                input.name = col;
+                input.value = row[col] || '';
+                if (col === 'id') input.readOnly = true;
+                if (col === 'password' || col === 'password_hash') input.type = 'password';
+                
+                div.appendChild(label);
+                div.appendChild(input);
+                modalBody.appendChild(div);
+            });
+            
+            new bootstrap.Modal(document.getElementById('editModal')).show();
+        }
+    </script>
+</body>
+</html>

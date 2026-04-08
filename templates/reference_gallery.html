@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">Visual Reference Gallery</h2>
+            <p class="text-muted">Quick reference for alphabets, numbers, and common signs across different sign languages.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for ref in references %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <div class="card h-100 shadow-sm border-0 transition-transform">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ ref.title }}</h5>
+                        <span class="badge bg-accent">{{ ref.lang }}</span>
+                    </div>
+                    <div class="card-body p-0 overflow-hidden">
+                        <img src="{{ url_for('static', filename='img/' + ref.img) }}" 
+                             alt="{{ ref.title }}" 
+                             class="img-fluid w-100 reference-img" 
+                             style="cursor: pointer;"
+                             onclick="openModal(this.src, '{{ ref.title }}')">
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center">
+                        <small class="text-muted">Click image to enlarge</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Modal for enlarged image -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Reference Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img src="" id="modalImage" class="img-fluid" alt="Enlarged Reference">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .transition-transform:hover {
+        transform: translateY(-5px);
+    }
+    .reference-img {
+        transition: transform 0.3s ease;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        min-height: 250px;
+    }
+    .reference-img:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<script>
+    function openModal(src, title) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('modalTitle').innerText = title;
+        var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        myModal.show();
+    }
+</script>
+
+{% endblock %}

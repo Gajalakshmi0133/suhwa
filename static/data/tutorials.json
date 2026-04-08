@@ -1,0 +1,1385 @@
+{
+  "asl": {
+    "name": "American Sign Language",
+    "region": "United States, Canada, parts of Africa",
+    "modules": [
+      {
+        "id": "intro",
+        "title": "Introduction",
+        "lessons": [
+          {
+            "id": "asl_intro_1",
+            "title": "Welcome to ASL",
+            "target": "HELLO",
+            "instructions": [
+              "Watch the orientation video.",
+              "Learn about hand dominance.",
+              "Understand facial expressions."
+            ],
+            "video_url": "/static/videos/asl/intro.mp4"
+          }
+        ]
+      },
+      {
+        "id": "alphabet",
+        "title": "Alphabet & Fingerspelling",
+        "lessons": [
+          {
+            "id": "asl_alpha_a",
+            "title": "Letter 'A'",
+            "target": "A",
+            "instructions": [
+              "Close hand into a fist.",
+              "Thumb on the side.",
+              "Palm forward."
+            ],
+            "video_url": "/static/videos/asl/alpha_a.mp4"
+          },
+          {
+            "id": "asl_alpha_b",
+            "title": "Letter 'B'",
+            "target": "B",
+            "instructions": [
+              "Open hand flat.",
+              "Thumb across palm.",
+              "Palm forward."
+            ],
+            "video_url": "/static/videos/asl/alpha_b.mp4"
+          }
+        ]
+      },
+      {
+        "id": "numbers",
+        "title": "Numbers Tutorial",
+        "lessons": [
+          {
+            "id": "asl_num_0",
+            "title": "Number '0'",
+            "target": "0",
+            "instructions": [
+              "Form an 'O' shape with your fingers.",
+              "Palm facing forward."
+            ],
+            "video_url": "/static/videos/asl/number_0.mp4"
+          },
+          {
+            "id": "asl_num_1",
+            "title": "Number '1'",
+            "target": "1",
+            "instructions": [
+              "Index finger up.",
+              "Palm facing inwards."
+            ],
+            "video_url": "/static/videos/asl/number_1.mp4"
+          },
+          {
+            "id": "asl_num_2",
+            "title": "Number '2'",
+            "target": "2",
+            "instructions": [
+              "Index and middle fingers up.",
+              "Palm facing inwards."
+            ],
+            "video_url": "/static/videos/asl/number_2.mp4"
+          },
+          {
+            "id": "asl_num_3",
+            "title": "Number '3'",
+            "target": "3",
+            "instructions": [
+              "Thumb, index, and middle fingers out.",
+              "Palm facing inwards."
+            ],
+            "video_url": "/static/videos/asl/number_3.mp4"
+          },
+          {
+            "id": "asl_num_4",
+            "title": "Number '4'",
+            "target": "4",
+            "instructions": [
+              "Four fingers up.",
+              "Thumb tucked in.",
+              "Palm facing inwards."
+            ],
+            "video_url": "/static/videos/asl/number_4.mp4"
+          },
+          {
+            "id": "asl_num_5",
+            "title": "Number '5'",
+            "target": "5",
+            "instructions": [
+              "All five fingers spread.",
+              "Palm facing inwards."
+            ],
+            "video_url": "/static/videos/asl/number_5.mp4"
+          },
+          {
+            "id": "asl_num_6",
+            "title": "Number '6'",
+            "target": "6",
+            "instructions": [
+              "Pinky and thumb touch.",
+              "Other three fingers up.",
+              "Palm facing forward."
+            ],
+            "video_url": "/static/videos/asl/number_6.mp4"
+          },
+          {
+            "id": "asl_num_7",
+            "title": "Number '7'",
+            "target": "7",
+            "instructions": [
+              "Ring finger and thumb touch.",
+              "Other three fingers up.",
+              "Palm facing forward."
+            ],
+            "video_url": "/static/videos/asl/number_7.mp4"
+          },
+          {
+            "id": "asl_num_8",
+            "title": "Number '8'",
+            "target": "8",
+            "instructions": [
+              "Middle finger and thumb touch.",
+              "Other three fingers up.",
+              "Palm facing forward."
+            ],
+            "video_url": "/static/videos/asl/number_8.mp4"
+          },
+          {
+            "id": "asl_num_9",
+            "title": "Number '9'",
+            "target": "9",
+            "instructions": [
+              "Index finger and thumb touch.",
+              "Other three fingers up.",
+              "Palm facing forward."
+            ],
+            "video_url": "/static/videos/asl/number_9.mp4"
+          }
+        ]
+      },
+      {
+        "id": "greetings",
+        "title": "Basic Greetings",
+        "lessons": [
+          {
+            "id": "asl_greet_hello",
+            "title": "Hello",
+            "target": "HELLO",
+            "instructions": [
+              "Hand at forehead.",
+              "Move outwards like a salute."
+            ],
+            "video_url": "/static/videos/asl/hello.mp4"
+          }
+        ]
+      },
+      {
+        "id": "words",
+        "title": "Common Daily-Use Words",
+        "lessons": [
+          {
+            "id": "asl_word_mother",
+            "title": "Mother",
+            "target": "MOTHER",
+            "instructions": [
+              "Thumb touches chin.",
+              "Hand open."
+            ],
+            "video_url": "/static/videos/asl/mother.mp4"
+          }
+        ]
+      },
+      {
+        "id": "sentences",
+        "title": "Sentence Formation",
+        "lessons": [
+          {
+            "id": "asl_sent_1",
+            "title": "Simple Sentences",
+            "target": "I LEARN SIGN",
+            "instructions": [
+              "Sign 'I'.",
+              "Sign 'LEARN'.",
+              "Sign 'SIGN'."
+            ],
+            "video_url": "/static/videos/asl/sentences.mp4"
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/asl/a.jpg"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/asl/b.jpg"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/asl/c.jpg"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/asl/d.jpg"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/asl/e.jpg"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/asl/f.jpg"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/asl/g.jpg"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/asl/h.jpg"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/asl/i.jpg"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/asl/j.jpg"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/asl/k.jpg"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/asl/l.jpg"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/asl/m.jpg"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/asl/n.jpg"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/asl/o.jpg"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/asl/p.jpg"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/asl/q.jpg"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/asl/r.jpg"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/asl/s.jpg"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/asl/t.jpg"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/asl/u.jpg"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/asl/v.jpg"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/asl/w.jpg"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/asl/x.jpg"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/asl/y.jpg"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/asl/z.jpg"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/asl/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/asl/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/asl/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/asl/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/asl/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/asl/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/asl/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/asl/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/asl/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/asl/9.png"
+          }
+        ]
+      },
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "https://placehold.co/400x400?text=ASL+Hello"
+          },
+          {
+            "name": "Thank You",
+            "image": "https://placehold.co/400x400?text=ASL+Thank You"
+          },
+          {
+            "name": "Sorry",
+            "image": "https://placehold.co/400x400?text=ASL+Sorry"
+          },
+          {
+            "name": "Please",
+            "image": "https://placehold.co/400x400?text=ASL+Please"
+          }
+        ]
+      }
+    ]
+  },
+  "bsl": {
+    "name": "British Sign Language",
+    "region": "United Kingdom",
+    "modules": [
+      {
+        "id": "bsl_intro",
+        "title": "BSL Basics",
+        "lessons": [
+          {
+            "id": "bsl_hello",
+            "title": "Greeting: Hello",
+            "target": "HELLO",
+            "instructions": [
+              "Wave your hand near your head.",
+              "Smile and make eye contact."
+            ],
+            "video_url": ""
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/bsl/a.png"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/bsl/b.png"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/bsl/c.png"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/bsl/d.png"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/bsl/e.png"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/bsl/f.png"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/bsl/g.png"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/bsl/h.png"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/bsl/i.png"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/bsl/j.png"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/bsl/k.png"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/bsl/l.png"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/bsl/m.png"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/bsl/n.png"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/bsl/o.png"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/bsl/p.png"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/bsl/q.png"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/bsl/r.png"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/bsl/s.png"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/bsl/t.png"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/bsl/u.png"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/bsl/v.png"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/bsl/w.png"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/bsl/x.png"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/bsl/y.png"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/bsl/z.png"
+          }
+        ]
+      },
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "/static/img/signs/bsl/hello.png"
+          },
+          {
+            "name": "Thank You",
+            "image": "/static/img/signs/bsl/thank_you.png"
+          },
+          {
+            "name": "Please",
+            "image": "/static/img/signs/bsl/please.png"
+          },
+          {
+            "name": "Sorry",
+            "image": "/static/img/signs/bsl/sorry.png"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/bsl/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/bsl/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/bsl/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/bsl/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/bsl/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/bsl/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/bsl/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/bsl/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/bsl/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/bsl/9.png"
+          }
+        ]
+      }
+    ]
+  },
+  "isl": {
+    "name": "Indian Sign Language",
+    "region": "India",
+    "modules": [
+      {
+        "id": "isl_intro",
+        "title": "ISL Greetings",
+        "lessons": [
+          {
+            "id": "isl_hello",
+            "title": "Namaste / Hello",
+            "target": "HELLO",
+            "instructions": [
+              "Join both palms together (Namaste) or wave.",
+              "Standard greeting in India."
+            ],
+            "video_url": ""
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/isl/a.png"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/isl/b.png"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/isl/c.png"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/isl/d.png"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/isl/e.png"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/isl/f.png"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/isl/g.png"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/isl/h.png"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/isl/i.png"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/isl/j.png"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/isl/k.png"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/isl/l.png"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/isl/m.png"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/isl/n.png"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/isl/o.png"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/isl/p.png"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/isl/q.png"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/isl/r.png"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/isl/s.png"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/isl/t.png"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/isl/u.png"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/isl/v.png"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/isl/w.png"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/isl/x.png"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/isl/y.png"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/isl/z.png"
+          }
+        ]
+      },
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "/static/img/signs/isl/hello.png"
+          },
+          {
+            "name": "Thank You",
+            "image": "/static/img/signs/isl/thank_you.png"
+          },
+          {
+            "name": "Please",
+            "image": "/static/img/signs/isl/please.png"
+          },
+          {
+            "name": "Sorry",
+            "image": "/static/img/signs/isl/sorry.png"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/isl/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/isl/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/isl/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/isl/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/isl/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/isl/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/isl/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/isl/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/isl/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/isl/9.png"
+          }
+        ]
+      }
+    ]
+  },
+  "jsl": {
+    "name": "Japanese Sign Language",
+    "region": "Japan",
+    "modules": [
+      {
+        "id": "jsl_intro",
+        "title": "JSL Greetings",
+        "lessons": [
+          {
+            "id": "jsl_hello",
+            "title": "Konnichiwa (Hello)",
+            "target": "HELLO",
+            "instructions": [
+              "Point index fingers of both hands towards each other.",
+              "Move them down slightly like a bow."
+            ],
+            "video_url": ""
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "/static/img/signs/jsl/hello.png"
+          },
+          {
+            "name": "Thank You",
+            "image": "/static/img/signs/jsl/thank_you.png"
+          },
+          {
+            "name": "Please",
+            "image": "/static/img/signs/jsl/please.png"
+          },
+          {
+            "name": "Sorry",
+            "image": "/static/img/signs/jsl/sorry.png"
+          }
+        ]
+      },
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/jsl/a.png"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/jsl/b.png"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/jsl/c.png"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/jsl/d.png"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/jsl/e.png"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/jsl/f.png"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/jsl/g.png"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/jsl/h.png"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/jsl/i.png"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/jsl/j.png"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/jsl/k.png"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/jsl/l.png"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/jsl/m.png"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/jsl/n.png"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/jsl/o.png"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/jsl/p.png"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/jsl/q.png"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/jsl/r.png"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/jsl/s.png"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/jsl/t.png"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/jsl/u.png"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/jsl/v.png"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/jsl/w.png"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/jsl/x.png"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/jsl/y.png"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/jsl/z.png"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/jsl/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/jsl/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/jsl/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/jsl/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/jsl/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/jsl/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/jsl/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/jsl/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/jsl/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/jsl/9.png"
+          }
+        ]
+      }
+    ]
+  },
+  "ksl": {
+    "name": "Korean Sign Language",
+    "region": "Korea",
+    "modules": [
+      {
+        "id": "ksl_intro",
+        "title": "KSL Greetings",
+        "lessons": [
+          {
+            "id": "ksl_hello",
+            "title": "Annyeong (Hello)",
+            "target": "HELLO",
+            "instructions": [
+              "Clench both fists and move them down.",
+              "Represents a respectful bow."
+            ],
+            "video_url": ""
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "/static/img/signs/ksl/hello.png"
+          },
+          {
+            "name": "Thank You",
+            "image": "/static/img/signs/ksl/thank_you.png"
+          },
+          {
+            "name": "Please",
+            "image": "/static/img/signs/ksl/please.png"
+          },
+          {
+            "name": "Sorry",
+            "image": "/static/img/signs/ksl/sorry.png"
+          }
+        ]
+      },
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/ksl/a.png"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/ksl/b.png"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/ksl/c.png"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/ksl/d.png"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/ksl/e.png"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/ksl/f.png"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/ksl/g.png"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/ksl/h.png"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/ksl/i.png"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/ksl/j.png"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/ksl/k.png"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/ksl/l.png"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/ksl/m.png"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/ksl/n.png"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/ksl/o.png"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/ksl/p.png"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/ksl/q.png"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/ksl/r.png"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/ksl/s.png"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/ksl/t.png"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/ksl/u.png"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/ksl/v.png"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/ksl/w.png"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/ksl/x.png"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/ksl/y.png"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/ksl/z.png"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/ksl/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/ksl/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/ksl/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/ksl/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/ksl/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/ksl/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/ksl/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/ksl/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/ksl/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/ksl/9.png"
+          }
+        ]
+      }
+    ]
+  },
+  "lsf": {
+    "name": "French Sign Language",
+    "region": "France",
+    "modules": [
+      {
+        "id": "lsf_intro",
+        "title": "LSF Greetings",
+        "lessons": [
+          {
+            "id": "lsf_hello",
+            "title": "Bonjour (Hello)",
+            "target": "HELLO",
+            "instructions": [
+              "Hand starts at mouth and moves forward.",
+              "Standard French greeting."
+            ],
+            "video_url": ""
+          }
+        ]
+      }
+    ],
+    "visual_dictionary": [
+      {
+        "category": "Common Words",
+        "items": [
+          {
+            "name": "Hello",
+            "image": "/static/img/signs/lsf/hello.png"
+          },
+          {
+            "name": "Thank You",
+            "image": "/static/img/signs/lsf/thank_you.png"
+          },
+          {
+            "name": "Please",
+            "image": "/static/img/signs/lsf/please.png"
+          },
+          {
+            "name": "Sorry",
+            "image": "/static/img/signs/lsf/sorry.png"
+          }
+        ]
+      },
+      {
+        "category": "Alphabets",
+        "items": [
+          {
+            "name": "A",
+            "image": "/static/img/signs/lsf/a.png"
+          },
+          {
+            "name": "B",
+            "image": "/static/img/signs/lsf/b.png"
+          },
+          {
+            "name": "C",
+            "image": "/static/img/signs/lsf/c.png"
+          },
+          {
+            "name": "D",
+            "image": "/static/img/signs/lsf/d.png"
+          },
+          {
+            "name": "E",
+            "image": "/static/img/signs/lsf/e.png"
+          },
+          {
+            "name": "F",
+            "image": "/static/img/signs/lsf/f.png"
+          },
+          {
+            "name": "G",
+            "image": "/static/img/signs/lsf/g.png"
+          },
+          {
+            "name": "H",
+            "image": "/static/img/signs/lsf/h.png"
+          },
+          {
+            "name": "I",
+            "image": "/static/img/signs/lsf/i.png"
+          },
+          {
+            "name": "J",
+            "image": "/static/img/signs/lsf/j.png"
+          },
+          {
+            "name": "K",
+            "image": "/static/img/signs/lsf/k.png"
+          },
+          {
+            "name": "L",
+            "image": "/static/img/signs/lsf/l.png"
+          },
+          {
+            "name": "M",
+            "image": "/static/img/signs/lsf/m.png"
+          },
+          {
+            "name": "N",
+            "image": "/static/img/signs/lsf/n.png"
+          },
+          {
+            "name": "O",
+            "image": "/static/img/signs/lsf/o.png"
+          },
+          {
+            "name": "P",
+            "image": "/static/img/signs/lsf/p.png"
+          },
+          {
+            "name": "Q",
+            "image": "/static/img/signs/lsf/q.png"
+          },
+          {
+            "name": "R",
+            "image": "/static/img/signs/lsf/r.png"
+          },
+          {
+            "name": "S",
+            "image": "/static/img/signs/lsf/s.png"
+          },
+          {
+            "name": "T",
+            "image": "/static/img/signs/lsf/t.png"
+          },
+          {
+            "name": "U",
+            "image": "/static/img/signs/lsf/u.png"
+          },
+          {
+            "name": "V",
+            "image": "/static/img/signs/lsf/v.png"
+          },
+          {
+            "name": "W",
+            "image": "/static/img/signs/lsf/w.png"
+          },
+          {
+            "name": "X",
+            "image": "/static/img/signs/lsf/x.png"
+          },
+          {
+            "name": "Y",
+            "image": "/static/img/signs/lsf/y.png"
+          },
+          {
+            "name": "Z",
+            "image": "/static/img/signs/lsf/z.png"
+          }
+        ]
+      },
+      {
+        "category": "Numbers",
+        "items": [
+          {
+            "name": "0",
+            "image": "/static/img/signs/lsf/0.png"
+          },
+          {
+            "name": "1",
+            "image": "/static/img/signs/lsf/1.png"
+          },
+          {
+            "name": "2",
+            "image": "/static/img/signs/lsf/2.png"
+          },
+          {
+            "name": "3",
+            "image": "/static/img/signs/lsf/3.png"
+          },
+          {
+            "name": "4",
+            "image": "/static/img/signs/lsf/4.png"
+          },
+          {
+            "name": "5",
+            "image": "/static/img/signs/lsf/5.png"
+          },
+          {
+            "name": "6",
+            "image": "/static/img/signs/lsf/6.png"
+          },
+          {
+            "name": "7",
+            "image": "/static/img/signs/lsf/7.png"
+          },
+          {
+            "name": "8",
+            "image": "/static/img/signs/lsf/8.png"
+          },
+          {
+            "name": "9",
+            "image": "/static/img/signs/lsf/9.png"
+          }
+        ]
+      }
+    ]
+  }
+}

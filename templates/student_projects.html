@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-info text-dark">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                <h1 class="display-3 fw-bold mb-3">Student Showcase</h1>
+                <p class="lead mb-4">Discover how the next generation of developers and researchers is using Suhwa to build innovative accessibility tools.</p>
+                <a href="{{ url_for('help') }}" class="btn btn-dark btn-lg rounded-pill px-4">Start Your Project</a>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block animate__animated animate__fadeInRight">
+                <i class="fas fa-graduation-cap display-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Student Project 1 -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 animate__animated animate__fadeInUp">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary rounded-pill">Mobile App</span>
+                        <small class="text-muted"><i class="fab fa-github"></i> Open Source</small>
+                    </div>
+                    <h4 class="fw-bold mb-2">SignLearn Mobile</h4>
+                    <p class="text-muted">A gamified sign language learning app built by students at Tech University using Suhwa's real-time recognition API for feedback.</p>
+                    <div class="d-flex align-items-center mt-4">
+                        <img src="https://i.pravatar.cc/150?u=student1" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                        <span class="small fw-bold">Alex Johnson & Team</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Project 2 -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-success rounded-pill">Web Tool</span>
+                        <small class="text-muted"><i class="fab fa-youtube"></i> Demo Available</small>
+                    </div>
+                    <h4 class="fw-bold mb-2">GestureDocs</h4>
+                    <p class="text-muted">An innovative browser extension that allows users to navigate web documentation using sign language gestures for better accessibility.</p>
+                    <div class="d-flex align-items-center mt-4">
+                        <img src="https://i.pravatar.cc/150?u=student2" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+                        <span class="small fw-bold">Sarah Chen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="mt-5 p-5 bg-dark text-white rounded-5 text-center shadow-lg animate__animated animate__zoomIn">
+        <h2 class="fw-bold mb-3">Want to be featured here?</h2>
+        <p class="lead opacity-75 mb-4 mx-auto" style="max-width: 600px;">
+            We love seeing what students build! Share your project with us and get featured in our global showcase.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/contact" class="btn btn-primary px-4 py-2 rounded-pill fw-bold">Submit Project</a>
+            <a href="{{ url_for('dataset_info') }}" class="btn btn-outline-light px-4 py-2 rounded-pill fw-bold">Get Datasets</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

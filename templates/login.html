@@ -1,0 +1,511 @@
+{% extends "layout.html" %}
+{% set no_footer = True %}
+{% block content %}
+<!-- Material Icons for eye toggle - REMOVED -->
+<style>
+  :root {
+    --login-bg: #0f172a;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --error: #ef4444;
+    --success: #10b981;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+  
+  .login-hero {
+    min-height: 100vh;
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated background particles */
+  .login-hero::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-image: radial-gradient(circle, var(--accent) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.1;
+    animation: moveBackground 60s linear infinite;
+  }
+
+  @keyframes moveBackground {
+    from { transform: translate(-25%, -25%); }
+    to { transform: translate(0, 0); }
+  }
+
+  .login-card {
+    border: none;
+    border-radius: 32px;
+    background: #ffffff;
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    max-width: 1100px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(20px);
+  }
+
+  .login-side-panel {
+    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative Graphic Element */
+  .hand-graphic {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulseGraphic 4s ease-in-out infinite;
+  }
+
+  @keyframes pulseGraphic {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+
+  .login-form-panel {
+    padding: 4rem;
+  }
+
+  .brand-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .nav-tabs-custom {
+    border-bottom: 2px solid #f1f5f9;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
+  }
+
+  .nav-tabs-custom .nav-link {
+    border: none;
+    color: #94a3b8;
+    font-weight: 700;
+    padding: 0.75rem 0;
+    background: none;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-tabs-custom .nav-link:hover {
+    color: var(--accent);
+  }
+
+  .nav-tabs-custom .nav-link.active {
+    color: var(--accent);
+  }
+
+  .nav-tabs-custom .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 3px;
+    animation: scaleIn 0.3s ease;
+  }
+
+  @keyframes scaleIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .form-control-custom {
+    background: #f8fafc;
+    border: 2px solid #f1f5f9;
+    border-radius: 14px;
+    padding: 0.85rem 1.2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .form-control-custom:focus {
+    background: #ffffff;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .btn-login {
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    padding: 1rem;
+    border-radius: 14px;
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-login:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.4);
+  }
+
+  .feature-item-glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-item-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(8px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .trust-element {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .trust-element i {
+    margin-right: 4px;
+    color: var(--success);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-badge {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--accent);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+  }
+</style>
+
+<div class="login-hero">
+  <div class="container animate-up">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card login-card">
+          <div class="row g-0">
+            <!-- Left Side: Form -->
+            <div class="col-lg-6 login-form-panel bg-white">
+              <div class="brand-logo-container">
+                <div class="brand-icon">
+                  <i class="fas fa-hand-paper"></i>
+                </div>
+                <div>
+                  <h3 class="fw-bold text-dark mb-0" style="letter-spacing: -1px;">SUHWA</h3>
+                  <small class="text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">AI SIGN LANGUAGE ASSISTANT</small>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="nav nav-tabs nav-tabs-custom w-100" id="authTabs" role="tablist">
+                  <button class="nav-link active" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin" type="button" role="tab">Sign In</button>
+                  <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab">Sign Up</button>
+                </div>
+              </div>
+
+              <!-- Messages Container -->
+              <div id="authAlert" class="alert-custom"></div>
+
+              <div class="tab-content" id="authTabsContent">
+                <!-- Sign In Tab -->
+                <div class="tab-pane fade show active" id="signin" role="tabpanel">
+                  <h4 class="fw-bold mb-2">Welcome Back!</h4>
+                  <p class="text-muted mb-4" style="font-size: 0.9rem;">Continue your journey with the world's most advanced sign language assistant.</p>
+                  
+                  <form id="signinForm">
+                    <div class="mb-3">
+                      <label class="form-label-custom">Email or Username</label>
+                      <input name="identifier" type="text" class="form-control-custom" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-4">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label-custom mb-0">Password</label>
+                        <a href="{{ url_for('forgot_password') }}" class="small text-accent text-decoration-none fw-bold" style="color: var(--accent);">Reset Password?</a>
+                      </div>
+                      <div class="password-box">
+                        <input name="password" type="password" id="signin-password" class="form-control-custom" placeholder="••••••••" required>
+                        <i class="fas fa-eye-slash toggle-eye" onclick="togglePassword('signin-password', this)" role="button" aria-label="Toggle password visibility"></i>
+                      </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-login shadow-sm">Sign In to Dashboard</button>
+                  </form>
+                </div>
+
+                <!-- Sign Up Tab -->
+                <div class="tab-pane fade" id="signup" role="tabpanel">
+                  <h4 class="fw-bold mb-2">Create Account</h4>
+                  <p class="text-muted mb-4" style="font-size: 0.9rem;">Join our community and start breaking communication barriers today.</p>
+                  
+                  <form id="signupForm">
+                    <div class="mb-3">
+                      <label class="form-label-custom">Full Name</label>
+                      <input name="name" type="text" class="form-control-custom" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="row g-3">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label-custom">Username</label>
+                        <input name="username" type="text" class="form-control-custom" placeholder="username" required>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label-custom">Email Address</label>
+                        <input name="email" type="email" class="form-control-custom" placeholder="email@example.com" required>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label-custom">Password</label>
+                      <div class="password-box">
+                        <input name="password" type="password" id="signup-password" class="form-control-custom" placeholder="••••••••" required>
+                        <i class="fas fa-eye-slash toggle-eye" onclick="togglePassword('signup-password', this)" role="button" aria-label="Toggle password visibility"></i>
+                      </div>
+                      <div class="mt-1"><small class="text-muted" style="font-size: 0.7rem;">Min. 8 characters with numbers & symbols</small></div>
+                    </div>
+                    <div class="mb-4">
+                      <label class="form-label-custom">Confirm Password</label>
+                      <div class="password-box">
+                        <input name="confirm_password" type="password" id="signup-confirm-password" class="form-control-custom" placeholder="••••••••" required>
+                        <i class="fas fa-eye-slash toggle-eye" onclick="togglePassword('signup-confirm-password', this)" role="button" aria-label="Toggle password visibility"></i>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-login shadow-sm">Get Started Now</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Trust Element -->
+              <div class="trust-element">
+                <span><i class="fas fa-lock"></i> Secure Login</span>
+                <span><i class="fas fa-shield-alt"></i> Privacy Protected</span>
+                <span><i class="fas fa-user-check"></i> Encrypted Access</span>
+              </div>
+            </div>
+
+            <!-- Right Side: Panel -->
+            <div class="col-lg-6 login-side-panel">
+              <div class="hand-graphic"></div>
+              
+              <div class="mb-auto position-relative">
+                <div class="status-badge">
+                  <div class="status-dot"></div>
+                  AI DETECTION ACTIVE
+                </div>
+                <h1 class="display-4 fw-bold mb-4">Breaking Barriers, One Sign at a Time.</h1>
+                <p class="lead opacity-90 mb-5">Suhwa bridges the gap between sign language and spoken words, fostering seamless communication for an inclusive world.</p>
+              </div>
+              
+              <div class="mt-4 position-relative">
+                <div class="feature-item-glass">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="rounded-circle bg-white p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; min-width: 54px;">
+                      <i class="fas fa-hand-sparkles text-primary"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-1 fw-bold">Intelligent Detection</h6>
+                      <small class="opacity-80">High-precision hand landmark tracking in real-time.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="feature-item-glass">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="rounded-circle bg-white p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; min-width: 54px;">
+                      <i class="fas fa-shield-halved text-primary"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-1 fw-bold">Privacy Guaranteed</h6>
+                      <small class="opacity-80">Your interactions are encrypted and never stored on servers.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="feature-item-glass">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="rounded-circle bg-white p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; min-width: 54px;">
+                      <i class="fas fa-comments text-primary"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-1 fw-bold">Seamless Communication</h6>
+                      <small class="opacity-80">Bridge the gap instantly with real-time translation.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    } else {
+      input.type = "password";
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    }
+  }
+
+  function showAlert(message, type) {
+    const alert = document.getElementById('authAlert');
+    alert.textContent = message;
+    alert.className = `alert-custom alert-${type}`;
+    alert.style.display = 'block';
+  }
+
+  // Handle Sign In
+  document.getElementById('signinForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+      const response = await fetch("{{ url_for('api_login') }}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        showAlert("Successfully Logged In", "success");
+        setTimeout(() => {
+          window.location.href = result.redirect || "{{ url_for('dashboard') }}";
+        }, 1500);
+      } else {
+        showAlert(result.message || "Invalid credentials", "error");
+      }
+    } catch (error) {
+      showAlert("An error occurred. Please try again.", "error");
+    }
+  });
+
+  // Handle Sign Up
+  document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Client-side validation
+    if (data.password !== data.confirm_password) {
+      showAlert("Passwords do not match", "error");
+      return;
+    }
+    if (data.password.length < 8) {
+      showAlert("Password must be at least 8 characters", "error");
+      return;
+    }
+    
+    try {
+      const response = await fetch("{{ url_for('api_register') }}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        showAlert("Registration successful! You can now sign in.", "success");
+        // Switch to sign in tab
+        setTimeout(() => {
+          const signinTab = new bootstrap.Tab(document.getElementById('signin-tab'));
+          signinTab.show();
+          document.getElementById('authAlert').style.display = 'none';
+        }, 2000);
+      } else {
+        showAlert(result.message || "Registration failed", "error");
+      }
+    } catch (error) {
+      showAlert("An error occurred. Please try again.", "error");
+    }
+  });
+</script>
+{% endblock %}

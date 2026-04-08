@@ -1,0 +1,12 @@
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+typeCheckingMode = "basic"
+reportMissingModuleSource = false
+
+[tool.pylance]
+python.analysis.extraPaths = [
+    "./venv/Lib/site-packages",
+    "./tf_env/Lib/site-packages",
+    "./.venv_mp/Lib/site-packages"
+]

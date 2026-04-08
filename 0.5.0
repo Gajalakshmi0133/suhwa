@@ -1,0 +1,2 @@
+Requirement already satisfied: ml-dtypes in c:\users\hhsud\appdata\local\programs\python\python312\lib\site-packages (0.3.2)
+Requirement already satisfied: numpy>1.20 in c:\users\hhsud\appdata\local\programs\python\python312\lib\site-packages (from ml-dtypes) (1.26.4)

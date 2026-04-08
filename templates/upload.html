@@ -1,0 +1,521 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Video Recognition</h1>
+            <p class="lead text-muted">Upload your sign language videos for instant AI analysis and translation.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-body p-5">
+                        <form id="uploadForm" method="post" enctype="multipart/form-data">
+                            <!-- Drag & Drop Zone -->
+                            <div id="dropZone" class="upload-zone text-center p-5 mb-4 border-2 border-dashed rounded-4 position-relative">
+                                <input type="file" name="file" id="fileInput" accept="video/*" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" required>
+                                <div class="upload-icon mb-3">
+                                    <i class="fas fa-cloud-upload-alt display-1 text-primary"></i>
+                                </div>
+                                <h4 class="fw-bold">Drag and drop video here</h4>
+                                <p class="text-muted">or click to browse your files</p>
+                                <div class="badge bg-light text-dark px-3 py-2">MP4, AVI, MOV, MKV</div>
+                            </div>
+
+                            <!-- File Info (Hidden by default) -->
+                            <div id="fileInfo" class="d-none mb-4 animate__animated animate__fadeIn">
+                                <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-file-play-fill fs-1 text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 id="fileName" class="mb-0 fw-bold text-truncate" style="max-width: 250px;">-</h6>
+                                        <small id="fileSize" class="text-muted">-</small>
+                                    </div>
+                                    <button type="button" id="removeFile" class="btn btn-link text-danger p-0">
+                                        <i class="fas fa-times-circle fs-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Video Preview -->
+                            <div id="previewContainer" class="d-none mb-4 rounded-4 overflow-hidden shadow-sm animate__animated animate__zoomIn">
+                                <video id="previewVideo" controls class="w-100"></video>
+                            </div>
+
+                            <button type="submit" id="uploadBtn" class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm">
+                                <span class="btn-text">Start Recognition</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+                            </button>
+                        </form>
+
+                        <!-- Progress Bar -->
+                        <div class="progress mt-4 rounded-pill d-none" style="height: 10px;">
+                            <div id="uploadProgress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Processing State -->
+                        <div id="processingState" class="text-center mt-4 d-none animate__animated animate__fadeIn">
+                            <div class="spinner-grow text-primary mb-3" role="status"></div>
+                            <h5 class="fw-bold">Analyzing Video Content...</h5>
+                            <p class="text-muted">Our AI is processing the sign language gestures.</p>
+                        </div>
+
+                        <!-- Results -->
+                        <div id="resultArea" class="mt-5 d-none animate__animated animate__fadeInUp">
+                            <hr class="my-4 opacity-10">
+                            
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="fas fa-check-circle-fill text-success fs-3 me-2"></i>
+                                <h4 class="mb-0 fw-bold">Recognition Results</h4>
+                            </div>
+
+                            <div class="row g-4">
+                                <!-- Translation Column -->
+                                <div class="col-lg-7">
+                                    <div class="result-card bg-primary bg-opacity-10 p-4 rounded-4 h-100 border border-primary border-opacity-25 shadow-sm">
+                                        <!-- Signed Glosses -->
+                                        <div class="mb-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-muted"><i class="fas fa-hand-point-up me-2"></i>Signed Glosses</h6>
+                                            </div>
+                                            <div id="translation" class="fs-5 fw-medium text-muted bg-white bg-opacity-50 p-3 rounded-3 border" style="min-height: 60px;"></div>
+                                        </div>
+
+                                        <!-- English Translation -->
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h5 class="fw-bold mb-0"><i class="fas fa-language me-2"></i>Translated English</h5>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" id="copyText" class="btn btn-outline-primary border-0" title="Copy Text">
+                                                        <i class="fas fa-clipboard"></i>
+                                                    </button>
+                                                    <button type="button" id="speakText" class="btn btn-outline-primary border-0" title="Text to Speech">
+                                                        <i class="fas fa-volume-up"></i>
+                                                    </button>
+                                                    <button type="button" id="downloadText" class="btn btn-outline-primary border-0" title="Download TXT">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="englishTranslation" class="fs-4 fw-bold text-primary bg-white p-3 rounded-3 shadow-sm border border-primary border-opacity-10" style="min-height: 80px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Stats Column -->
+                                <div class="col-lg-5">
+                                    <div class="stats-card bg-light p-4 rounded-4 h-100 border shadow-sm">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2"></i>Statistics</h5>
+                                        <div class="stats-list">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span class="text-muted">Average Confidence:</span>
+                                                <span class="fw-bold text-success"><span id="confidence">0</span>%</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span class="text-muted">Total Signs Detected:</span>
+                                                <span id="total" class="fw-bold text-dark">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span class="text-muted">Processing Time:</span>
+                                                <span class="fw-bold text-dark"><span id="duration">0</span>s</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="text-muted">Total Frames Processed:</span>
+                                                <span id="framesAnalyzed" class="fw-bold text-dark">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Chart Column -->
+                                <div class="col-lg-8">
+                                    <div class="chart-card bg-white p-4 rounded-4 border shadow-sm h-100">
+                                        <h5 class="fw-bold mb-4"><i class="fas fa-chart-pie me-2"></i>Word Frequency Analysis</h5>
+                                        <div style="height: 300px;">
+                                            <canvas id="freqChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Timeline Column -->
+                                <div class="col-lg-4">
+                                    <div class="timeline-card bg-white p-4 rounded-4 border shadow-sm h-100">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-clock-history me-2"></i>Timeline Detection</h5>
+                                        <div id="timelineList" class="overflow-auto" style="max-height: 300px;">
+                                            <div class="text-center text-muted py-4">
+                                                <i class="fas fa-hourglass-half d-block fs-2 mb-2"></i>
+                                                No events recorded
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Result Video (If applicable) -->
+                                <div id="resultVideoContainer" class="col-12 d-none">
+                                    <div class="rounded-4 overflow-hidden shadow-sm">
+                                        <video id="resultVideo" controls class="w-100"></video>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent History -->
+                <div id="recentHistory" class="mt-5 d-none animate__animated animate__fadeIn">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-clock-history me-2"></i> Recent Analysis</h5>
+                    <div id="historyList" class="list-group list-group-flush rounded-4 shadow-sm border overflow-hidden">
+                        <!-- History items injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Toast Notification -->
+<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+<style>
+    .upload-zone {
+        background: #fafbff;
+        border-color: #dee2e6;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+        background: #f0f4ff;
+        border-color: var(--bs-primary);
+    }
+    .upload-zone i {
+        transition: transform 0.3s ease;
+    }
+    .upload-zone:hover i {
+        transform: translateY(-10px);
+    }
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+(function () {
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const previewContainer = document.getElementById('previewContainer');
+    const previewVideo = document.getElementById('previewVideo');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const progressWrapper = document.querySelector('.progress');
+    const progressBar = document.getElementById('uploadProgress');
+    const processingState = document.getElementById('processingState');
+    const resultArea = document.getElementById('resultArea');
+    const resultVideo = document.getElementById('resultVideo');
+    const resultVideoContainer = document.getElementById('resultVideoContainer');
+    const toastContainer = document.getElementById('toastContainer');
+    const historyList = document.getElementById('historyList');
+    const recentHistory = document.getElementById('recentHistory');
+    const timelineList = document.getElementById('timelineList');
+
+    let freqChart = null;
+
+    function updateTimeline(timeline) {
+        if (!timeline || timeline.length === 0) {
+            timelineList.innerHTML = `
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-hourglass-half d-block fs-2 mb-2"></i>
+                    No events recorded
+                </div>`;
+            return;
+        }
+
+        timelineList.innerHTML = timeline.map(item => `
+            <div class="d-flex align-items-center mb-3 p-2 rounded-3 hover-bg-light border-start border-primary border-4 shadow-sm bg-light">
+                <div class="badge bg-primary rounded-pill me-3">${item.time}s</div>
+                <div class="fw-bold text-uppercase small">${item.word}</div>
+            </div>
+        `).join('');
+    }
+
+    // Action Buttons
+    document.getElementById('copyText').onclick = () => {
+        const text = document.getElementById('englishTranslation').innerText;
+        if (text) {
+            navigator.clipboard.writeText(text);
+            showToast('English translation copied!');
+        }
+    };
+
+    document.getElementById('speakText').onclick = () => {
+        const text = document.getElementById('englishTranslation').innerText;
+        if (text && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    document.getElementById('downloadText').onclick = () => {
+        const text = document.getElementById('englishTranslation').innerText;
+        if (text) {
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `suhwa_english_translation_${Date.now()}.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    };
+
+    function showChart(freqData) {
+        const ctx = document.getElementById('freqChart').getContext('2d');
+        
+        if (freqChart) {
+            freqChart.destroy();
+        }
+
+        const labels = Object.keys(freqData);
+        const data = Object.values(freqData);
+        const colors = labels.map((_, i) => `hsla(${i * 137.5 % 360}, 70%, 60%, 0.8)`);
+
+        freqChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Word Frequency',
+                    data: data,
+                    backgroundColor: colors,
+                    borderRadius: 8,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Load History
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem('suhwa_upload_history') || '[]');
+        if (history.length > 0) {
+            recentHistory.classList.remove('d-none');
+            historyList.innerHTML = history.map(item => `
+                <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-play-circle text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="mb-0 fw-bold">${item.name}</h6>
+                            <small class="text-muted">${item.date}</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-light text-dark border">${item.result}</span>
+                </div>
+            `).join('');
+        }
+    }
+
+    function saveToHistory(name, result) {
+        const history = JSON.parse(localStorage.getItem('suhwa_upload_history') || '[]');
+        history.unshift({
+            name: name,
+            result: result,
+            date: new Date().toLocaleString()
+        });
+        localStorage.setItem('suhwa_upload_history', JSON.stringify(history.slice(0, 5)));
+        loadHistory();
+    }
+
+    loadHistory();
+
+    // Drag and Drop Effects
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+        });
+    });
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    fileInput.addEventListener('change', handleFile);
+
+    function handleFile() {
+        const file = fileInput.files[0];
+        if (!file) {
+            resetUI();
+            return;
+        }
+
+        fileName.textContent = file.name;
+        fileSize.textContent = formatBytes(file.size);
+        fileInfo.classList.remove('d-none');
+        dropZone.classList.add('d-none');
+
+        const url = URL.createObjectURL(file);
+        previewVideo.src = url;
+        previewContainer.classList.remove('d-none');
+        previewVideo.load();
+    }
+
+    removeFile.addEventListener('click', () => {
+        fileInput.value = '';
+        resetUI();
+    });
+
+    function resetUI() {
+        fileInfo.classList.add('d-none');
+        dropZone.classList.remove('d-none');
+        previewContainer.classList.add('d-none');
+        previewVideo.src = '';
+        resultArea.classList.add('d-none');
+        progressWrapper.classList.add('d-none');
+    }
+
+    function showToast(message, isSuccess = true) {
+        const bgClass = isSuccess ? 'text-bg-success' : 'text-bg-danger';
+        const toastEl = document.createElement('div');
+        toastEl.className = `toast align-items-center border-0 ${bgClass}`;
+        toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        toastContainer.appendChild(toastEl);
+        const bsToast = new bootstrap.Toast(toastEl);
+        bsToast.show();
+        toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if (!file) {
+            showToast('Please select a video file first.', false);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        uploadBtn.disabled = true;
+        uploadBtn.querySelector('.spinner-border').classList.remove('d-none');
+        uploadBtn.querySelector('.btn-text').textContent = 'Uploading...';
+        progressWrapper.classList.remove('d-none');
+        progressBar.style.width = '0%';
+        resultArea.classList.add('d-none');
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', window.location.href, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.upload.onprogress = (ev) => {
+            if (ev.lengthComputable) {
+                const percent = Math.round((ev.loaded / ev.total) * 100);
+                progressBar.style.width = percent + '%';
+                progressBar.textContent = percent + '%';
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                progressWrapper.classList.add('d-none');
+                processingState.classList.remove('d-none');
+                uploadBtn.querySelector('.btn-text').textContent = 'Processing...';
+
+                const resp = JSON.parse(xhr.responseText);
+                if (resp.success) {
+                    setTimeout(() => {
+                        processingState.classList.add('d-none');
+                        uploadBtn.disabled = false;
+                        uploadBtn.querySelector('.spinner-border').classList.add('d-none');
+                        uploadBtn.querySelector('.btn-text').textContent = 'Start Recognition';
+                        
+                        document.getElementById("translation").innerText = resp.translation || "No signs detected";
+                        document.getElementById("englishTranslation").innerText = resp.english_translation || "No translation available";
+                        document.getElementById("confidence").innerText = (resp.confidence || 0).toFixed(2);
+                        document.getElementById("total").innerText = resp.total_signs || 0;
+                        document.getElementById("duration").innerText = resp.duration || 0;
+                        document.getElementById("framesAnalyzed").innerText = resp.frames_analyzed || 0;
+
+                        updateTimeline(resp.timeline);
+
+                        if (resp.video_url) {
+                            resultVideo.src = resp.video_url;
+                            resultVideoContainer.classList.remove('d-none');
+                        }
+                        resultArea.classList.remove('d-none');
+                        if (resp.word_frequency) {
+                            showChart(resp.word_frequency);
+                        }
+                        
+                        saveToHistory(file.name, resp.translation || "No result");
+                        showToast('Video processed successfully!');
+                    }, 1000);
+                } else {
+                    showError(resp.message || 'Processing failed');
+                }
+            } else {
+                showError('Server error occurred');
+            }
+        };
+
+        xhr.onerror = () => showError('Network error occurred');
+        
+        function showError(msg) {
+            uploadBtn.disabled = false;
+            uploadBtn.querySelector('.spinner-border').classList.add('d-none');
+            uploadBtn.querySelector('.btn-text').textContent = 'Start Recognition';
+            progressWrapper.classList.add('d-none');
+            processingState.classList.add('d-none');
+            showToast(msg, false);
+        }
+
+        xhr.send(formData);
+    });
+})();
+</script>
+{% endblock %}

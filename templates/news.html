@@ -1,0 +1,171 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-5 bg-light border-bottom">
+    <div class="container py-5">
+        <div class="row align-items-end g-4">
+            <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                <div class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 rounded-pill fw-bold">SUHWA PULSE</div>
+                <h1 class="display-3 fw-bold mb-3">News & Updates</h1>
+                <p class="lead opacity-75 mb-0">Stay current with our latest research breakthroughs, feature releases, and community stories.</p>
+            </div>
+            <div class="col-lg-6 animate__animated animate__fadeInRight">
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-lg-end">
+                    <div class="search-box position-relative">
+                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        <input type="text" class="form-control rounded-pill border-0 shadow-sm ps-5 py-2" placeholder="Search articles..." style="min-width: 280px;">
+                    </div>
+                    <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm">
+                        <i class="fas fa-envelope-at me-2"></i> Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Featured Post -->
+        <div class="col-12 animate__animated animate__fadeIn">
+            <div class="card border-0 shadow-lg rounded-5 overflow-hidden featured-card">
+                <div class="row g-0">
+                    <div class="col-lg-7">
+                        <div class="position-relative h-100">
+                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200" class="img-fluid h-100" style="object-fit: cover; min-height: 450px;" alt="Main News">
+                            <div class="position-absolute top-0 start-0 m-4">
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow">FEATURED STORY</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 p-5 d-flex flex-column justify-content-center bg-white">
+                        <div class="mb-4">
+                            <span class="badge bg-primary px-3 py-2 rounded-pill">Major Release</span>
+                            <span class="text-muted small ms-3"><i class="fas fa-calendar3 me-2"></i>March 15, 2024</span>
+                        </div>
+                        <h2 class="display-6 fw-bold mb-4 lh-sm">Suhwa v2.0: Multi-Signer Recognition</h2>
+                        <p class="text-muted mb-4 fs-5 lh-base">Our latest update enables the system to recognize multiple signers in a single frame, facilitating dynamic group conversations.</p>
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <a href="#" class="btn btn-dark btn-lg rounded-pill px-5 fw-bold w-fit">Read Full Story</a>
+                            <div class="share-actions d-flex gap-2">
+                                <button class="btn btn-light rounded-circle"><i class="fas fa-bookmark"></i></button>
+                                <button class="btn btn-light rounded-circle"><i class="fas fa-share"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <div class="col-md-4 animate__animated animate__fadeInUp">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden card-hover position-relative">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=600" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Research">
+                    <button class="btn btn-white btn-sm position-absolute top-0 end-0 m-3 rounded-circle shadow-sm save-article"><i class="fas fa-bookmark"></i></button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-info-subtle text-info px-2 py-1 rounded-pill small">Research</span>
+                        <small class="text-muted"><i class="fas fa-clock me-1"></i> 5 min read</small>
+                    </div>
+                    <h5 class="fw-bold mb-3 lh-base">Breakthrough in Low-Latency Landmark Tracking</h5>
+                    <p class="text-muted small mb-4">Our researchers published a new paper on optimizing MediaPipe pipelines for mobile devices.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <small class="text-muted">Feb 28, 2024</small>
+                        <a href="#" class="btn btn-link p-0 text-primary fw-bold text-decoration-none small">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden card-hover position-relative">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=600" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Community">
+                    <button class="btn btn-white btn-sm position-absolute top-0 end-0 m-3 rounded-circle shadow-sm save-article"><i class="fas fa-bookmark"></i></button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill small">Community</span>
+                        <small class="text-muted"><i class="fas fa-clock me-1"></i> 3 min read</small>
+                    </div>
+                    <h5 class="fw-bold mb-3 lh-base">Suhwa Hackathon 2024: Winners Announced</h5>
+                    <p class="text-muted small mb-4">Discover the amazing accessibility tools built by our community using the Suhwa SDK.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <small class="text-muted">Jan 12, 2024</small>
+                        <a href="#" class="btn btn-link p-0 text-primary fw-bold text-decoration-none small">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden card-hover position-relative">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=600" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Partnership">
+                    <button class="btn btn-white btn-sm position-absolute top-0 end-0 m-3 rounded-circle shadow-sm save-article"><i class="fas fa-bookmark"></i></button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-warning-subtle text-warning px-2 py-1 rounded-pill small">Partnership</span>
+                        <small class="text-muted"><i class="fas fa-clock me-1"></i> 4 min read</small>
+                    </div>
+                    <h5 class="fw-bold mb-3 lh-base">Partnering with Global Deaf Federations</h5>
+                    <p class="text-muted small mb-4">We're expanding our dataset diversity through new collaborations with sign language experts.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <small class="text-muted">Dec 05, 2023</small>
+                        <a href="#" class="btn btn-link p-0 text-primary fw-bold text-decoration-none small">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="mt-5 pt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled"><a class="page-link rounded-circle me-2" href="#">Previous</a></li>
+            <li class="page-item active"><a class="page-link rounded-circle me-2 px-3" href="#">1</a></li>
+            <li class="page-item"><a class="page-link rounded-circle me-2 px-3" href="#">2</a></li>
+            <li class="page-item"><a class="page-link rounded-circle px-3" href="#">3</a></li>
+            <li class="page-item ms-2"><a class="page-link rounded-circle px-3" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .w-fit { width: fit-content; }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.05) !important; }
+    .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
+    .featured-card { transition: transform 0.5s ease; }
+    .featured-card:hover { transform: scale(1.01); }
+    .save-article {
+        background: white;
+        color: #666;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    .save-article:hover {
+        background: var(--bs-primary);
+        color: white;
+    }
+    .pagination .page-link {
+        border: none;
+        color: var(--bs-dark);
+        background: #f8f9fa;
+        margin: 0 3px;
+        transition: all 0.3s ease;
+    }
+    .pagination .page-item.active .page-link {
+        background: var(--bs-primary);
+        color: white;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

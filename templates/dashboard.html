@@ -1,0 +1,235 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid px-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Dashboard</h2>
+      <p class="text-muted mb-0">Welcome back, <strong>{{ username }}</strong></p>
+    </div>
+    <span class="badge bg-primary-subtle text-primary px-3 py-2">AI Sign Detection</span>
+  </div>
+
+  <!-- Statistics -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body d-flex align-items-center">
+          <div class="icon-box bg-primary text-white me-3">
+            <i class="fas fa-video"></i>
+          </div>
+          <div>
+            <p class="text-muted mb-1">Mode</p>
+            <h5 class="mb-0">Real-Time</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body d-flex align-items-center">
+          <div class="icon-box bg-success text-white me-3">
+            <i class="fas fa-film"></i>
+          </div>
+          <div>
+            <p class="text-muted mb-1">Videos Processed</p>
+            <h5 class="mb-0">{{ videos_processed or 3 }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body d-flex align-items-center">
+          <div class="icon-box bg-warning text-white me-3">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div>
+            <p class="text-muted mb-1">Detections Today</p>
+            <h5 class="mb-0">{{ detections_today or 5 }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body d-flex align-items-center">
+          <div class="icon-box bg-purple text-white me-3">
+            <i class="fas fa-comments-square-dots-fill"></i>
+          </div>
+          <div>
+            <p class="text-muted mb-1">Top Sign</p>
+            <h5 class="mb-0">{{ top_sign or 'Hello' }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Analytics -->
+  <div class="row g-4 mb-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0">System Confidence Trends</h5>
+            <div class="badge bg-success-subtle text-success">Last 7 Days</div>
+        </div>
+        <div style="height: 300px;">
+          <canvas id="confidenceChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h5 class="fw-bold mb-4">Processing Load</h5>
+        <div style="height: 300px;">
+          <canvas id="processingChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Cards -->
+  <div class="row g-4">
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 action-card">
+        <div class="card-body text-center p-4">
+          <i class="fas fa-video display-4 text-primary mb-3"></i>
+          <h5 class="fw-semibold">Real-Time Detection</h5>
+          <p class="text-muted">Detect sign language live using your webcam.</p>
+          <a href="{{ url_for('detect') }}" class="btn btn-primary w-100">Start</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 action-card">
+        <div class="card-body text-center p-4">
+          <i class="fas fa-upload display-4 text-success mb-3"></i>
+          <h5 class="fw-semibold">Upload Video</h5>
+          <p class="text-muted">Upload a video file for sign detection.</p>
+          <a href="{{ url_for('upload') }}" class="btn btn-success w-100">Upload</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 action-card">
+        <div class="card-body text-center p-4">
+          <i class="fas fa-user-lines-fill display-4 text-info mb-3"></i>
+          <h5 class="fw-semibold">Profile</h5>
+          <p class="text-muted">View or update your profile details.</p>
+          <a href="{{ url_for('profile') }}" class="btn btn-info text-white w-100">View Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 action-card border border-primary">
+        <div class="card-body text-center p-4">
+          <i class="fas fa-film display-4 text-primary mb-3"></i>
+          <h5 class="fw-semibold">Video Call</h5>
+          <p class="text-muted">Start a video call with live subtitles.</p>
+          <a href="{{ url_for('create_meeting') }}" class="btn btn-primary w-100">Start Video Call</a>
+          
+          <div class="input-group mt-3">
+            <input type="text" id="joinMeetingIdDash" class="form-control" placeholder="Meeting ID">
+            <button class="btn btn-outline-primary" type="button" onclick="joinMeetingDash()">Join</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Confidence Trends Chart
+  const confCtx = document.getElementById('confidenceChart').getContext('2d');
+  new Chart(confCtx, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Average Confidence',
+        data: [92, 94, 91, 95, 93, 97, 96],
+        borderColor: '#4A90E2',
+        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: '#4A90E2'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: false, min: 80, max: 100 },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Processing Load Chart
+  const procCtx = document.getElementById('processingChart').getContext('2d');
+  new Chart(procCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Video', 'Real-time', 'Meeting'],
+      datasets: [{
+        data: [45, 35, 20],
+        backgroundColor: ['#4A90E2', '#28a745', '#17a2b8'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 20 } }
+      },
+      cutout: '70%'
+    }
+  });
+
+  function joinMeetingDash() {
+    const id = document.getElementById('joinMeetingIdDash').value.trim();
+    if (id) {
+      window.location.href = '/meet/' + id;
+    } else {
+      alert('Please enter a Meeting ID');
+    }
+  }
+</script>
+
+<style>
+.bg-purple { background-color: #6f42c1; }
+.icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.action-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+}
+</style>
+{% endblock %}

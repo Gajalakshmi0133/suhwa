@@ -1,0 +1,689 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid py-4" id="aiTutorPage">
+    <!-- Top Stats Bar -->
+    <div class="row mb-3 g-2">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-primary text-white p-3 d-flex flex-row align-items-center justify-content-between">
+                <div>
+                    <div class="small opacity-75 text-uppercase fw-bold">Daily Streak</div>
+                    <h3 class="mb-0" id="streakVal">5 Days</h3>
+                </div>
+                <i class="fas fa-fire fa-2x opacity-50"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-success text-white p-3 d-flex flex-row align-items-center justify-content-between">
+                <div>
+                    <div class="small opacity-75 text-uppercase fw-bold">Total XP</div>
+                    <h3 class="mb-0" id="xpVal">200</h3>
+                </div>
+                <i class="fas fa-star fa-2x opacity-50"></i>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
+                <div class="flex-grow-1">
+                    <div class="small text-muted text-uppercase fw-bold mb-1">Overall Course Progress</div>
+                    <div class="progress" style="height: 12px;">
+                        <div id="courseProgress" class="progress-bar bg-info progress-bar-striped" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <span id="coursePercent" class="fw-bold text-info">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- 1. Lesson Panel (Left) -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 flex-column overflow-hidden">
+                <div class="card-header bg-white border-bottom py-3 d-flex flex-column gap-2">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-book-reader me-2 text-primary"></i>Lesson Guide</h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="startQuiz()">
+                                <i class="fas fa-question-circle me-1"></i> Quiz
+                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-light rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Select Lesson
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3" id="lessonDropdown" style="max-height: 300px; overflow-y: auto;">
+                                    <!-- Injected -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1 overflow-auto pb-1" id="categoryFilterBar">
+                        <button class="btn btn-xs btn-primary rounded-pill px-3 py-1 extra-small filter-btn active" data-cat="all">All</button>
+                        <button class="btn btn-xs btn-outline-secondary rounded-pill px-3 py-1 extra-small filter-btn" data-cat="alphabets">Alphabets</button>
+                        <button class="btn btn-xs btn-outline-secondary rounded-pill px-3 py-1 extra-small filter-btn" data-cat="numbers">Numbers</button>
+                        <button class="btn btn-xs btn-outline-secondary rounded-pill px-3 py-1 extra-small filter-btn" data-cat="words">Words</button>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 overflow-auto" id="lessonContentArea">
+                    <div id="welcomeScreen" class="text-center py-5">
+                        <img src="/static/img/tutor_welcome.svg" class="img-fluid mb-4" style="max-height: 150px;" onerror="this.src='https://placehold.co/150x150?text=AI+Tutor'">
+                        <h4 class="fw-bold">Ready to Start?</h4>
+                        <p class="text-muted mb-4">Pick a sign from the list to begin your interactive journey.</p>
+                        <button class="btn btn-primary rounded-pill px-5 py-2 shadow-sm" onclick="openLessonPicker()">
+                            Browse Lessons
+                        </button>
+                    </div>
+
+                    <div id="activeLessonArea" style="display: none;">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 id="activeLessonTitle" class="mb-0 text-primary fw-bold">Title</h4>
+                            <span id="activeLessonCat" class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill">Category</span>
+                        </div>
+                        
+                        <div id="stepContainer" class="mt-4">
+                            <!-- Steps Injected -->
+                        </div>
+
+                        <div class="mt-auto pt-4 border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span id="stepCounter" class="small fw-bold text-muted">Step 1 of 3</span>
+                                <div class="btn-group gap-2">
+                                    <button id="lessonPrevBtn" class="btn btn-outline-secondary rounded-circle" style="width: 40px; height: 40px;"><i class="fas fa-chevron-left"></i></button>
+                                    <button id="lessonNextBtn" class="btn btn-primary rounded-pill px-4">Next Step</button>
+                                </div>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div id="stepProgress" class="progress-bar" style="width: 33%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Camera Section (Middle) -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 bg-dark overflow-hidden h-100 position-relative">
+                <div class="card-header border-0 bg-transparent position-absolute top-0 start-0 w-100 z-3 p-3 d-flex justify-content-between align-items-center">
+                    <div class="badge bg-dark bg-opacity-50 text-white rounded-pill px-3 py-2">
+                        <span id="camStatusDot" class="text-danger me-2">●</span> LIVE CAMERA
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-circle" title="Full Screen"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+
+                <div class="position-relative flex-grow-1" style="min-height: 400px; background: #111;">
+                    <video id="tutorWebcam" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                    <canvas id="tutorOverlay" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+                    
+                    <!-- AI Overlays -->
+                    <div id="accuracyMeter" class="position-absolute bottom-0 start-0 w-100 p-4 z-3" style="display: none;">
+                        <div class="d-flex justify-content-between text-white small mb-1">
+                            <span>Recognition Confidence</span>
+                            <span id="accuracyLabel">0%</span>
+                        </div>
+                        <div class="progress bg-dark bg-opacity-50" style="height: 10px; border: 1px solid rgba(255,255,255,0.2);">
+                            <div id="accuracyBar" class="progress-bar bg-success" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div id="feedbackToast" class="position-absolute top-50 start-50 translate-middle z-3 text-center" style="display: none;">
+                        <div class="bg-success text-white p-4 rounded-circle shadow-lg d-inline-block animate__animated animate__zoomIn">
+                            <i class="fas fa-check fa-3x"></i>
+                        </div>
+                        <h2 class="text-white fw-bold mt-3 shadow-sm">CORRECT!</h2>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-dark border-0 p-3 d-flex justify-content-center gap-3">
+                    <button id="camToggleBtn" class="btn btn-outline-light rounded-pill px-4"><i class="fas fa-video me-2"></i>Start Camera</button>
+                    <button id="retryBtn" class="btn btn-outline-warning rounded-pill px-4" style="display: none;"><i class="fas fa-redo me-2"></i>Retry Practice</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. AI Feedback & Assistant (Right) -->
+        <div class="col-lg-3">
+            <div class="d-flex flex-column h-100 gap-3">
+                <!-- Detailed Feedback -->
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h6 class="mb-0 fw-bold"><i class="fas fa-comment-dots text-info me-2"></i>AI Feedback</h6>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div id="feedbackPlaceholder" class="py-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-robot text-muted fa-lg"></i>
+                            </div>
+                            <p class="small text-muted mb-0 italic">AI is waiting for your practice attempt...</p>
+                        </div>
+                        <div id="feedbackActive" style="display: none;">
+                            <div class="mb-3">
+                                <span id="feedbackStatusBadge" class="badge rounded-pill mb-2">Analyzing...</span>
+                                <h5 id="feedbackMessage" class="fw-bold mb-0">Good effort!</h5>
+                            </div>
+                            <div class="p-3 bg-light rounded-3 text-start small border">
+                                <strong class="d-block mb-1 text-uppercase" style="font-size: 0.7rem;">Improvement Tips:</strong>
+                                <span id="feedbackTips">Keep your hand centered and clear.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tutor Assistant -->
+                <div class="card border-0 shadow-sm rounded-4 flex-grow-1">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h6 class="mb-0 fw-bold"><i class="fas fa-magic text-purple me-2"></i>Tutor Assistant</h6>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div id="assistantChat" class="flex-grow-1 overflow-auto mb-3" style="max-height: 200px;">
+                            <div class="d-flex gap-2 mb-3">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded-3 small">
+                                    Hello! I'm your AI Sign Tutor. Ask me anything about sign language or how to use this app.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="assistantInput" class="form-control form-control-sm border-light bg-light rounded-start-pill px-3" placeholder="Type a question...">
+                            <button id="sendAssistantBtn" class="btn btn-primary btn-sm rounded-end-pill px-3"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Elements -->
+                <div class="card border-0 shadow-sm rounded-4 bg-gradient-purple text-white">
+                    <div class="card-body p-3">
+                        <h6 class="small fw-bold opacity-75 mb-3">RECENT ACHIEVEMENTS</h6>
+                        <div class="d-flex gap-2 overflow-auto pb-1" id="badgeContainer">
+                            <div class="badge-item" title="First Lesson">🥇</div>
+                            <div class="badge-item" title="7 Day Streak">🔥</div>
+                            <div class="badge-item opacity-25" title="Locked">🔒</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Modal -->
+<div class="modal fade" id="quizModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Sign Language Quiz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div id="quizContainer">
+                    <div id="quizQuestion" class="text-center mb-4">
+                        <div class="small text-muted mb-2">Identify this sign:</div>
+                        <div id="quizEmoji" class="display-1 mb-3">👋</div>
+                        <h4 id="quizPrompt" class="fw-bold">Which word is this?</h4>
+                    </div>
+                    <div id="quizOptions" class="d-grid gap-2">
+                        <!-- Options Injected -->
+                    </div>
+                </div>
+                <div id="quizResult" class="text-center py-4" style="display: none;">
+                    <div id="quizIcon" class="mb-3"></div>
+                    <h3 id="quizStatus" class="fw-bold">Result!</h3>
+                    <p id="quizFeedback" class="text-muted"></p>
+                    <button class="btn btn-primary rounded-pill px-5 mt-3" onclick="nextQuiz()">Next Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-soft-primary { background-color: rgba(13, 110, 253, 0.1); }
+    .text-purple { color: #6f42c1; }
+    .bg-gradient-purple { background: linear-gradient(135deg, #6f42c1, #a951ed); }
+    .badge-item { font-size: 1.5rem; background: rgba(255,255,255,0.2); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+    #aiTutorPage { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .step-img-placeholder { height: 150px; background: #f8f9fa; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 2px dashed #eee; }
+    #assistantChat::-webkit-scrollbar { width: 4px; }
+    #assistantChat::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+    .pulse-red { animation: pulseRed 1.5s infinite; }
+    @keyframes pulseRed {
+        0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+        100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+    }
+    .extra-small { font-size: 0.7rem; }
+    #lessonDropdown .dropdown-item { font-size: 0.85rem; padding: 0.75rem 1rem; border-bottom: 1px solid #f8f9fa; }
+    #lessonDropdown .dropdown-item:last-child { border-bottom: 0; }
+    .filter-btn.active { box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3); }
+</style>
+
+<!-- MediaPipe & Speech -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // UI Elements
+        const lessonDropdown = document.getElementById('lessonDropdown');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const activeLessonArea = document.getElementById('activeLessonArea');
+        const activeLessonTitle = document.getElementById('activeLessonTitle');
+        const stepContainer = document.getElementById('stepContainer');
+        const stepCounter = document.getElementById('stepCounter');
+        const stepProgress = document.getElementById('stepProgress');
+        const lessonNextBtn = document.getElementById('lessonNextBtn');
+        const lessonPrevBtn = document.getElementById('lessonPrevBtn');
+        
+        const webcam = document.getElementById('tutorWebcam');
+        const canvas = document.getElementById('tutorOverlay');
+        const ctx = canvas.getContext('2d');
+        const camToggleBtn = document.getElementById('camToggleBtn');
+        const accuracyMeter = document.getElementById('accuracyMeter');
+        const accuracyBar = document.getElementById('accuracyBar');
+        const accuracyLabel = document.getElementById('accuracyLabel');
+        const feedbackToast = document.getElementById('feedbackToast');
+        
+        const feedbackPlaceholder = document.getElementById('feedbackPlaceholder');
+        const feedbackActive = document.getElementById('feedbackActive');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const feedbackTips = document.getElementById('feedbackTips');
+        const feedbackStatusBadge = document.getElementById('feedbackStatusBadge');
+        
+        const assistantChat = document.getElementById('assistantChat');
+        const assistantInput = document.getElementById('assistantInput');
+        const sendAssistantBtn = document.getElementById('sendAssistantBtn');
+
+        const streakVal = document.getElementById('streakVal');
+        const xpVal = document.getElementById('xpVal');
+        const courseProgress = document.getElementById('courseProgress');
+        const coursePercent = document.getElementById('coursePercent');
+        const categoryFilterBar = document.getElementById('categoryFilterBar');
+
+        // State
+        let allLessons = [];
+        let lessons = [];
+        let currentLesson = null;
+        let currentStepIndex = 0;
+        let cameraRunning = false;
+        let mpHands = null;
+        let mpCamera = null;
+        let isPracticing = false;
+        let lastEvalTime = 0;
+
+        // 1. Load Lessons & Progress
+        async function init() {
+            try {
+                const [lRes, pRes] = await Promise.all([
+                    fetch('/api/ai/lessons'),
+                    fetch('/api/ai/progress')
+                ]);
+                const lData = await lRes.json();
+                const pData = await pRes.json();
+
+                if (lData.success) {
+                    allLessons = lData.lessons;
+                    filterLessons('all');
+                }
+
+                if (pData.success) {
+                    streakVal.textContent = `${pData.streak} Days`;
+                    xpVal.textContent = pData.xp;
+                    const progressMap = pData.progress || [];
+                    const completedCount = progressMap.filter(p => p.status === 'completed').length;
+                    const percent = allLessons.length > 0 ? Math.round((completedCount / allLessons.length) * 100) : 0;
+                    courseProgress.style.width = `${percent}%`;
+                    coursePercent.textContent = `${percent}%`;
+                }
+            } catch (err) {
+                console.error("Init error:", err);
+            }
+        }
+
+        function filterLessons(cat) {
+            if (cat === 'all') {
+                lessons = allLessons;
+            } else {
+                lessons = allLessons.filter(l => l.category === cat);
+            }
+            
+            lessonDropdown.innerHTML = lessons.length > 0 ? lessons.map(l => `
+                <li><a class="dropdown-item d-flex justify-content-between align-items-center" href="#" onclick="startLesson('${l.id}')">
+                    <span>${l.emoji || ''} ${l.title}</span>
+                    <span class="badge bg-light text-muted extra-small">${l.category.toUpperCase()}</span>
+                </a></li>
+            `).join('') : '<li><a class="dropdown-item disabled">No lessons found</a></li>';
+        }
+
+        categoryFilterBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active', 'btn-primary');
+                b.classList.add('btn-outline-secondary');
+            });
+            btn.classList.add('active', 'btn-primary');
+            btn.classList.remove('btn-outline-secondary');
+            
+            filterLessons(btn.dataset.cat);
+        });
+
+        window.startLesson = async function(id) {
+            const res = await fetch(`/api/ai/lesson/${id}`);
+            const data = await res.json();
+            if (data.success) {
+                currentLesson = data.lesson;
+                currentStepIndex = 0;
+                welcomeScreen.style.display = 'none';
+                activeLessonArea.style.display = 'block';
+                activeLessonTitle.innerHTML = `${currentLesson.emoji || ''} ${currentLesson.title}`;
+                document.getElementById('activeLessonCat').textContent = currentLesson.category.toUpperCase();
+                updateStepUI();
+                speak(`Starting lesson on ${currentLesson.title}.`);
+            }
+        };
+
+        function updateStepUI() {
+            const step = currentLesson.steps[currentStepIndex];
+            stepCounter.textContent = `Step ${currentStepIndex + 1} of ${currentLesson.steps.length}`;
+            stepProgress.style.width = `${((currentStepIndex + 1) / currentLesson.steps.length) * 100}%`;
+            lessonPrevBtn.disabled = currentStepIndex === 0;
+            lessonNextBtn.textContent = currentStepIndex === currentLesson.steps.length - 1 ? "Finish Lesson" : "Next Step";
+            
+            isPracticing = step.type === 'practice';
+            accuracyMeter.style.display = isPracticing ? 'block' : 'none';
+            
+            let content = '';
+            if (step.type === 'intro') {
+                content = `<div class="animate__animated animate__fadeIn">
+                    <div class="text-center mb-4">
+                        <div class="display-1 mb-2">${currentLesson.emoji || '📖'}</div>
+                        <p class="lead fw-bold">${step.text}</p>
+                    </div>
+                </div>`;
+            } else if (step.type === 'demo') {
+                const mediaHtml = step.video 
+                    ? `<video src="${step.video}" autoplay loop muted class="img-fluid rounded-4 shadow-sm border" style="max-height: 200px;"></video>`
+                    : `<img src="${step.img || 'https://placehold.co/400x300?text=Sign+Image'}" class="img-fluid rounded-4 shadow-sm border" style="max-height: 200px;" onerror="this.src='https://placehold.co/400x300?text=Demo+Visual'">`;
+                
+                content = `<div class="animate__animated animate__fadeIn">
+                    <p class="fw-bold mb-3 text-muted">${step.text}</p>
+                    <div class="text-center mb-3">
+                        ${mediaHtml}
+                    </div>
+                    <div class="d-grid mt-3">
+                        <button class="btn btn-sm btn-outline-primary rounded-pill py-2" onclick="speak('${step.text}')">
+                            <i class="fas fa-volume-up me-2"></i>Repeat Instructions
+                        </button>
+                    </div>
+                </div>`;
+            } else if (step.type === 'practice') {
+                content = `<div class="animate__animated animate__fadeIn text-center">
+                    <div class="badge bg-danger mb-3 px-4 py-2 rounded-pill pulse-red">LIVE PRACTICE</div>
+                    <h4 class="fw-bold mb-2">Your Turn!</h4>
+                    <p class="text-muted small">${step.text}</p>
+                    <div class="mt-4 p-3 bg-light rounded-4 border border-dashed">
+                        <div class="display-4">${currentLesson.emoji || '✋'}</div>
+                        <div class="small fw-bold text-uppercase mt-2">Target: ${currentLesson.target}</div>
+                    </div>
+                </div>`;
+                if (!cameraRunning) initMediaPipe();
+            }
+            
+            stepContainer.innerHTML = content;
+            speak(step.text);
+        }
+
+        lessonNextBtn.onclick = () => {
+            if (currentStepIndex < currentLesson.steps.length - 1) {
+                currentStepIndex++;
+                updateStepUI();
+            } else {
+                finishLesson();
+            }
+        };
+
+        lessonPrevBtn.onclick = () => {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                updateStepUI();
+            }
+        };
+
+        function finishLesson() {
+            speak("Congratulations! You've finished this lesson.");
+            activeLessonArea.style.display = 'none';
+            welcomeScreen.style.display = 'block';
+            init(); // Refresh stats
+        }
+
+        // 2. MediaPipe & AI Logic
+        async function initMediaPipe() {
+            if (cameraRunning) return;
+            
+            camToggleBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Initializing...';
+            
+            mpHands = new Hands({
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+            });
+
+            mpHands.setOptions({
+                maxNumHands: 1,
+                modelComplexity: 1,
+                minDetectionConfidence: 0.6,
+                minTrackingConfidence: 0.6
+            });
+
+            mpHands.onResults(onResults);
+
+            mpCamera = new Camera(webcam, {
+                onFrame: async () => {
+                    await mpHands.send({image: webcam});
+                },
+                width: 640,
+                height: 480
+            });
+            
+            await mpCamera.start();
+            cameraRunning = true;
+            document.getElementById('camStatusDot').className = 'text-success me-2';
+            camToggleBtn.innerHTML = '<i class="fas fa-video-slash me-2"></i>Stop Camera';
+        }
+
+        function onResults(results) {
+            canvas.width = webcam.videoWidth;
+            canvas.height = webcam.videoHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+                
+                // Draw Skeleton
+                drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color: '#00FF41', lineWidth: 3});
+                drawLandmarks(ctx, landmarks, {color: '#FF3B3F', lineWidth: 1, radius: 3});
+
+                // Evaluate if in practice mode
+                if (isPracticing && Date.now() - lastEvalTime > 1200) {
+                    lastEvalTime = Date.now();
+                    evaluateAttempt(landmarks);
+                }
+            }
+        }
+
+        async function evaluateAttempt(landmarks) {
+            const lmList = landmarks.map(p => ({x: p.x, y: p.y, z: p.z}));
+            
+            try {
+                // 1. Get recognition
+                const detectRes = await fetch('/api/detect-stream', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ landmarks: [lmList], lang: 'asl' })
+                });
+                const detectData = await detectRes.json();
+
+                if (detectData.success && detectData.label) {
+                    // 2. Submit for lesson evaluation
+                    const evalRes = await fetch('/api/ai/submit-practice', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            lesson_id: currentLesson.id,
+                            label: detectData.label,
+                            confidence: detectData.confidence
+                        })
+                    });
+                    const evalData = await evalRes.json();
+
+                    updateFeedbackUI(evalData);
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        function updateFeedbackUI(data) {
+            feedbackPlaceholder.style.display = 'none';
+            feedbackActive.style.display = 'block';
+            
+            const conf = Math.round(data.accuracy * 100);
+            accuracyBar.style.width = `${conf}%`;
+            accuracyLabel.textContent = `${conf}%`;
+            
+            if (data.is_correct) {
+                feedbackStatusBadge.className = 'badge rounded-pill bg-success mb-2';
+                feedbackStatusBadge.textContent = 'Excellent!';
+                feedbackMessage.textContent = 'Perfect Match!';
+                feedbackMessage.className = 'fw-bold mb-0 text-success';
+                feedbackTips.textContent = "You've mastered this sign. Click 'Next' to continue.";
+                
+                feedbackToast.style.display = 'block';
+                setTimeout(() => { feedbackToast.style.display = 'none'; }, 2000);
+                speak("Correct! Well done.");
+            } else {
+                feedbackStatusBadge.className = 'badge rounded-pill bg-warning text-dark mb-2';
+                feedbackStatusBadge.textContent = 'Keep Trying';
+                feedbackMessage.textContent = 'Not quite there';
+                feedbackMessage.className = 'fw-bold mb-0 text-warning';
+                feedbackTips.textContent = data.feedback;
+            }
+        }
+
+        // 3. Utils: Speech & Assistant
+        function speak(text) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        sendAssistantBtn.onclick = async () => {
+            const q = assistantInput.value.trim();
+            if (!q) return;
+            
+            assistantChat.innerHTML += `<div class="d-flex justify-content-end mb-3">
+                <div class="bg-light p-2 rounded-3 small text-dark">${q}</div>
+            </div>`;
+            assistantInput.value = '';
+            
+            try {
+                const res = await fetch(`/api/chatbot?q=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                assistantChat.innerHTML += `<div class="d-flex gap-2 mb-3 animate__animated animate__fadeIn">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3 small text-primary">
+                        ${data.answer}
+                    </div>
+                </div>`;
+                assistantChat.scrollTop = assistantChat.scrollHeight;
+                speak(data.answer);
+            } catch (err) {}
+        };
+
+        camToggleBtn.onclick = () => {
+            if (cameraRunning) {
+                mpCamera.stop();
+                cameraRunning = false;
+                document.getElementById('camStatusDot').className = 'text-danger me-2';
+                camToggleBtn.innerHTML = '<i class="fas fa-video me-2"></i>Start Camera';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            } else {
+                initMediaPipe();
+            }
+        };
+
+        // 4. Quiz System
+        let currentQuizAnswer = '';
+        const quizModal = new bootstrap.Modal(document.getElementById('quizModal'));
+        const quizOptions = document.getElementById('quizOptions');
+        const quizContainer = document.getElementById('quizContainer');
+        const quizResult = document.getElementById('quizResult');
+
+        window.startQuiz = function() {
+            if (allLessons.length < 4) return alert("Not enough lessons to start quiz!");
+            quizModal.show();
+            nextQuiz();
+        };
+
+        window.nextQuiz = function() {
+            quizResult.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            // Pick a random lesson
+            const correct = allLessons[Math.floor(Math.random() * allLessons.length)];
+            currentQuizAnswer = correct.target;
+            
+            document.getElementById('quizEmoji').textContent = correct.emoji || '✋';
+            document.getElementById('quizPrompt').textContent = `Which ${correct.category.slice(0,-1)} is this?`;
+            
+            // Pick 3 distractors
+            let options = [correct];
+            while (options.length < 4) {
+                const rand = allLessons[Math.floor(Math.random() * allLessons.length)];
+                if (!options.find(o => o.target === rand.target)) options.push(rand);
+            }
+            
+            // Shuffle
+            options.sort(() => Math.random() - 0.5);
+            
+            quizOptions.innerHTML = options.map(o => `
+                <button class="btn btn-outline-dark rounded-pill py-3" onclick="checkAnswer('${o.target}')">
+                    ${o.title.split(': ')[1] || o.title}
+                </button>
+            `).join('');
+        };
+
+        window.checkAnswer = function(answer) {
+            quizContainer.style.display = 'none';
+            quizResult.style.display = 'block';
+            
+            const isCorrect = answer === currentQuizAnswer;
+            const status = document.getElementById('quizStatus');
+            const icon = document.getElementById('quizIcon');
+            const feedback = document.getElementById('quizFeedback');
+            
+            if (isCorrect) {
+                status.textContent = "CORRECT!";
+                status.className = "fw-bold text-success";
+                icon.innerHTML = '<i class="fas fa-check-circle fa-4x text-success"></i>';
+                feedback.textContent = "Excellent! You identified the sign correctly.";
+                speak("Correct!");
+            } else {
+                status.textContent = "WRONG!";
+                status.className = "fw-bold text-danger";
+                icon.innerHTML = '<i class="fas fa-times-circle fa-4x text-danger"></i>';
+                feedback.textContent = `The correct answer was "${currentQuizAnswer}". Keep practicing!`;
+                speak("Incorrect. The answer was " + currentQuizAnswer);
+            }
+        };
+
+        init();
+    });
+
+    function openLessonPicker() {
+        const drop = new bootstrap.Dropdown(document.querySelector('.dropdown-toggle'));
+        drop.show();
+    }
+</script>
+
+{% endblock %}

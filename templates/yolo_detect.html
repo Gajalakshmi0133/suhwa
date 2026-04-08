@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-eye me-2 text-warning"></i>YOLOv11 Real-time Detection</h5>
+                    <span class="badge bg-success">LIVE</span>
+                </div>
+                <div class="card-body p-0 bg-black" style="min-height: 480px; position: relative;">
+                    <img src="{{ url_for('yolo_feed') }}" width="100%" alt="YOLO Feed" class="img-fluid">
+                    <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                        <div id="predictionOverlay" class="text-white fw-bold fs-4 text-center"></div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light py-3">
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('detect') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Back to Standard Detection</a>
+                        <button onclick="location.reload()" class="btn btn-primary"><i class="fas fa-sync-alt me-2"></i>Restart Stream</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">About YOLOv11 Detection</h5>
+                <p class="text-muted small">
+                    This mode uses a **YOLOv11 (You Only Look Once)** deep learning model to detect ASL signs directly from the image pixels. 
+                    Unlike the standard mode which tracks hand landmarks, YOLO detects the hand and the sign simultaneously.
+                </p>
+                <div class="alert alert-info py-2 small border-0 shadow-none">
+                    <i class="fas fa-info-circle me-1"></i> Bounding boxes and confidence scores are rendered server-side.
+                </div>
+                <hr>
+                <h6 class="fw-bold small text-uppercase text-muted">Performance Tips</h6>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Keep hand fully in view</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Ensure good lighting</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Stay 3-5 feet from camera</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

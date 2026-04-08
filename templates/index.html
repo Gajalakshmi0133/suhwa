@@ -1,0 +1,421 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- 1. Hero / Landing Section -->
+<section class="hero">
+  <div class="decor-shape" data-parallax="0.18"></div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6" data-aos="fade-right">
+        <h1 class="hero-title">AI-Powered Sign Language Recognition for Inclusive Communication</h1>
+        <p class="hero-lead">Bridging the gap between the hearing-impaired and the world through real-time, intelligent hand gesture translation.</p>
+        <div class="hero-cta d-flex flex-wrap gap-2">
+          {% if not session.get('user_id') %}
+            <a class="btn btn-accent btn-lg" href="{{ url_for('login') }}">Start Live Detection</a>
+          {% else %}
+            <a class="btn btn-accent btn-lg" href="{{ url_for('detect') }}">Start Live Detection</a>
+          {% endif %}
+          <a class="btn btn-primary btn-lg" href="{{ url_for('create_meeting') }}"><i class="fas fa-video me-2"></i>Start Video Call</a>
+          
+          <div class="input-group" style="max-width: 300px;">
+            <input type="text" id="joinMeetingId" class="form-control" placeholder="Enter Meeting ID">
+            <button class="btn btn-outline-light" type="button" onclick="joinMeeting()">Join</button>
+          </div>
+        </div>
+
+        <script>
+          function joinMeeting() {
+            const id = document.getElementById('joinMeetingId').value.trim();
+            if (id) {
+              window.location.href = '/meet/' + id;
+            } else {
+              alert('Please enter a Meeting ID');
+            }
+          }
+        </script>
+      </div>
+      <div class="col-lg-6 text-center" data-aos="zoom-in">
+        <div class="scene">
+          <div class="card-3d p-3 d-inline-block" style="max-width:520px; position:relative;">
+            <img src="{{ url_for('static', filename='img/deaf_flag.png') }}" alt="Suhwa Hero" class="img-fluid rounded-3 hero-figure">
+            <div class="play-overlay">
+                <div class="pulse-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 3v18l15-9z"></path></svg>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Problem Definition -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="img-3d-wrap">
+                    <img src="{{ url_for('static', filename='img/sign.jpg') }}" alt="Communication Gap" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h2 class="section-title">The Challenge</h2>
+                <p class="lead">Communication shouldn't have barriers, yet millions face them every day.</p>
+                <ul class="list-unstyled custom-list">
+                    <li><i class="fas fa-exclamation-circle text-primary me-2"></i> Significant communication gap between hearing-impaired individuals and the general public.</li>
+                    <li><i class="fas fa-exclamation-circle text-primary me-2"></i> Lack of accessible, real-time sign language translation tools for daily interactions.</li>
+                    <li><i class="fas fa-exclamation-circle text-primary me-2"></i> Need for intelligent, user-friendly solutions that work on standard devices.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Proposed Solution -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Solution: Suhwa</h2>
+            <p class="text-muted">An intelligent bridge for seamless communication.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <div class="icon-box mb-3 mx-auto">
+                        <i class="fas fa-bolt fa-2x"></i>
+                    </div>
+                    <h4>Real-Time Recognition</h4>
+                    <p>High-speed AI models classify hand gestures into text and speech instantly.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <div class="icon-box mb-3 mx-auto">
+                        <i class="fas fa-universal-access fa-2x"></i>
+                    </div>
+                    <h4>Accessible Design</h4>
+                    <p>Designed with a focus on inclusivity, ensuring ease of use for everyone.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <div class="icon-box mb-3 mx-auto">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                    <h4>Educational Impact</h4>
+                    <p>Empowering users to learn and practice sign language effectively.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. System Workflow -->
+<section class="section-padding bg-dark text-white">
+    <div class="container">
+        <h2 class="section-title text-center text-white mb-5">How It Works</h2>
+        <div class="row g-0 workflow-steps">
+            <div class="col-md-3 step-item">
+                <div class="step-num">01</div>
+                <h5>Enable Webcam</h5>
+                <p>The system accesses your camera to capture live video feed.</p>
+            </div>
+            <div class="col-md-3 step-item">
+                <div class="step-num">02</div>
+                <h5>Extract Landmarks</h5>
+                <p>MediaPipe extracts key hand landmarks in real-time.</p>
+            </div>
+            <div class="col-md-3 step-item">
+                <div class="step-num">03</div>
+                <h5>AI Classification</h5>
+                <p>Deep learning models classify the signs with high accuracy.</p>
+            </div>
+            <div class="col-md-3 step-item">
+                <div class="step-num">04</div>
+                <h5>Output Display</h5>
+                <p>Signs are instantly converted to readable text and speech.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. Key Functionalities -->
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Core Features</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-video fa-2x"></i></div>
+                        <h5>Real-time Sign Detection</h5>
+                        <p>Experience seamless translation with our optimized detection engine.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-exchange-alt fa-2x"></i></div>
+                        <h5>Text ↔ Sign Translation</h5>
+                        <p>Bidirectional communication support for comprehensive interaction.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-book-reader fa-2x"></i></div>
+                        <h5>Learning Modules</h5>
+                        <p>Interactive practice sessions to master various sign languages.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-language fa-2x"></i></div>
+                        <h5>Multi-language Output</h5>
+                        <p>Support for multiple regional and international languages.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-user-shield fa-2x"></i></div>
+                        <h5>Secure Accounts</h5>
+                        <p>Keep your progress and settings synced across devices securely.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="text-primary mb-3"><i class="fas fa-mobile-alt fa-2x"></i></div>
+                        <h5>Cross-Platform</h5>
+                        <p>Access the platform from any modern web browser or device.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. Accessibility & Inclusivity -->
+<section class="section-padding bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="section-title text-white">Designed for Everyone</h2>
+                <p class="lead">Inclusivity is at the heart of Suhwa.</p>
+                <p>We've built a minimal, high-contrast UI with clear visuals and voice assistance to ensure that our tools are accessible to deaf and speech-impaired users alike.</p>
+                <div class="d-flex mt-4">
+                    <div class="me-4 text-center">
+                        <i class="fas fa-eye fa-2x mb-2"></i>
+                        <p>Visual Clarity</p>
+                    </div>
+                    <div class="me-4 text-center">
+                        <i class="fas fa-volume-up fa-2x mb-2"></i>
+                        <p>Voice Assist</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-hand-pointer fa-2x mb-2"></i>
+                        <p>Easy Nav</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="scene">
+                    <div class="card-3d">
+                        <img src="{{ url_for('static', filename='img/deaf_flag.png') }}" alt="Accessibility" class="img-fluid rounded-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. Technology Stack Overview -->
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Technology Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-item"><i class="fab fa-python"></i><span>Python</span></div>
+            <div class="tech-item"><i class="fas fa-fire"></i><span>Flask</span></div>
+            <div class="tech-item"><i class="fas fa-brain"></i><span>TensorFlow</span></div>
+            <div class="tech-item"><i class="fas fa-eye"></i><span>OpenCV</span></div>
+            <div class="tech-item"><i class="fas fa-hand-paper"></i><span>MediaPipe</span></div>
+            <div class="tech-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
+            <div class="tech-item"><i class="fab fa-bootstrap"></i><span>Bootstrap</span></div>
+            <div class="tech-item"><i class="fas fa-database"></i><span>SQL Server</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- 8. Use Cases -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Real-World Applications</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="use-case-card">
+                    <div class="use-case-img">
+                        <img src="{{ url_for('static', filename='img/frame1.jpg') }}" alt="Education" class="img-fluid">
+                    </div>
+                    <div class="p-3">
+                        <h5>Education</h5>
+                        <p class="small">Interactive tools for special education schools.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="use-case-card">
+                    <div class="use-case-img">
+                        <img src="{{ url_for('static', filename='img/team1.jpg') }}" alt="Public Services" class="img-fluid">
+                    </div>
+                    <div class="p-3">
+                        <h5>Public Services</h5>
+                        <p class="small">Assistance at counters and public service points.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="use-case-card">
+                    <div class="use-case-img">
+                        <img src="{{ url_for('static', filename='img/team2.jpg') }}" alt="Communication" class="img-fluid">
+                    </div>
+                    <div class="p-3">
+                        <h5>Daily Life</h5>
+                        <p class="small">Helping in everyday social interactions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="use-case-card">
+                    <div class="use-case-img">
+                        <img src="{{ url_for('static', filename='img/team3.jpg') }}" alt="Online Learning" class="img-fluid">
+                    </div>
+                    <div class="p-3">
+                        <h5>Online Learning</h5>
+                        <p class="small">Video-based sign language training platforms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- New: Platform Statistics -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="fw-bold text-primary mb-0">95%</h2>
+                    <p class="text-muted">Detection Accuracy</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="fw-bold text-primary mb-0">10k+</h2>
+                    <p class="text-muted">Active Users</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="fw-bold text-primary mb-0">50+</h2>
+                    <p class="text-muted">Sign Categories</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="fw-bold text-primary mb-0">24/7</h2>
+                    <p class="text-muted">Real-time Support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- New: Testimonials -->
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">What Our Users Say</h2>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="testimonial-card p-4 shadow-sm border-0 rounded-4 h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="User" class="rounded-circle me-3" style="width:50px; height:50px; object-fit:cover;">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Sarah Johnson</h6>
+                            <p class="small text-muted mb-0">Special Education Teacher</p>
+                        </div>
+                    </div>
+                    <p class="mb-0 italic">"Suhwa has completely transformed how I interact with my students. The real-time recognition is incredibly accurate and helpful in our daily lessons."</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card p-4 shadow-sm border-0 rounded-4 h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="User" class="rounded-circle me-3" style="width:50px; height:50px; object-fit:cover; filter: hue-rotate(90deg);">
+                        <div>
+                            <h6 class="mb-0 fw-bold">David Chen</h6>
+                            <p class="small text-muted mb-0">Deaf Community Advocate</p>
+                        </div>
+                    </div>
+                    <p class="mb-0 italic">"Finally, a tool that is both accessible and powerful. The multi-language support makes it a global solution for the hearing-impaired community."</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card p-4 shadow-sm border-0 rounded-4 h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="User" class="rounded-circle me-3" style="width:50px; height:50px; object-fit:cover; filter: hue-rotate(180deg);">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Elena Rodriguez</h6>
+                            <p class="small text-muted mb-0">Parent</p>
+                        </div>
+                    </div>
+                    <p class="mb-0 italic">"I use Suhwa to practice sign language with my daughter. It's user-friendly and the learning modules are perfectly designed for beginners like us."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 9. Call to Action (CTA) -->
+<section class="section-padding bg-gradient text-white text-center">
+    <div class="container">
+        <h2 class="mb-4">Ready to bridge the communication gap?</h2>
+        <p class="lead mb-4">Start using Suhwa today for real-time sign detection and learning.</p>
+        <a href="{{ url_for('detect') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold">Begin Real-Time Sign Detection Now</a>
+        <div class="mt-4">
+          {% if not session.get('user_id') %}
+            <a href="{{ url_for('login') }}" class="text-white me-3 text-decoration-none fw-bold">Login</a>
+            <a href="{{ url_for('login', active_tab='register') }}" class="text-white text-decoration-none fw-bold">Register</a>
+          {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- 10. Trust & Future Scope -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="section-title">Research-Oriented & Scalable</h2>
+                <p>Suhwa is built on cutting-edge research in computer vision and deep learning. Our roadmap includes extending support to more regional sign languages and developing dedicated mobile applications for on-the-go assistance.</p>
+                <div class="mt-4 p-4 border rounded-3 bg-light d-flex align-items-center justify-content-center">
+                    <i class="fas fa-microscope fa-3x text-primary me-4"></i>
+                    <div class="text-start">
+                        <h6 class="mb-1">Future Scope</h6>
+                        <p class="mb-0 small">Expanding to ISL, ASL, and regional dialects with mobile edge-AI integration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

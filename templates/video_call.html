@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid video-call-container">
+    <div class="row">
+        <div class="col-md-9 position-relative bg-dark p-0" style="height: 80vh;">
+            <!-- Remote Video (Full Size) -->
+            <video id="remoteVideo" autoplay playsinline class="w-100 h-100" style="object-fit: cover;"></video>
+            
+            <!-- Local Video (Picture-in-Picture) -->
+            <div class="local-video-wrapper position-absolute bottom-0 end-0 m-3" style="width: 240px; height: 180px; z-index: 10;">
+                <video id="localVideo" autoplay muted playsinline class="w-100 h-100 border border-light rounded shadow"></video>
+                <div class="text-white small text-center bg-dark bg-opacity-50">You</div>
+            </div>
+
+            <!-- Subtitles Overlay -->
+            <div id="subtitlesArea" class="position-absolute bottom-0 start-50 translate-middle-x mb-5 w-75">
+                <div id="speechSubtitles" class="subtitle-box speech-subtitle mb-2"></div>
+                <div id="signSubtitles" class="subtitle-box sign-subtitle"></div>
+            </div>
+
+            <!-- Call Controls -->
+            <div class="call-controls position-absolute bottom-0 start-50 translate-middle-x mb-3 d-flex gap-3">
+                <button id="toggleMic" class="btn btn-light rounded-circle p-3"><i class="fas fa-microphone"></i></button>
+                <button id="toggleVideo" class="btn btn-light rounded-circle p-3"><i class="fas fa-video"></i></button>
+                <button id="endCall" class="btn btn-danger rounded-circle p-3"><i class="fas fa-phone-slash"></i></button>
+            </div>
+        </div>
+
+        <div class="col-md-3 bg-light p-3 border-start overflow-auto" style="height: 80vh;">
+            <h5>Meeting Info</h5>
+            <div class="mb-3">
+                <small class="text-muted">Share this link to invite others:</small>
+                <div class="input-group input-group-sm mt-1">
+                    <input type="text" id="meetingLink" class="form-control" value="{{ request.url }}" readonly>
+                    <button class="btn btn-outline-secondary" onclick="copyLink()">Copy</button>
+                </div>
+            </div>
+            <hr>
+            <h5>Settings</h5>
+            <div class="mb-3">
+                <label class="small text-muted">Your Sign Language:</label>
+                <select id="languageSelect" class="form-select form-select-sm">
+                    <option value="asl">ASL (American)</option>
+                    <option value="bsl">BSL (British)</option>
+                    <option value="isl">ISL (Indian)</option>
+                    <option value="lsf">LSF (French)</option>
+                </select>
+            </div>
+            <hr>
+            <h5>Live Captions Log</h5>
+            <div id="captionsLog" class="small overflow-auto" style="max-height: 50vh;">
+                <!-- Logs will appear here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .video-call-container {
+        padding-top: 10px;
+    }
+    .subtitle-box {
+        text-align: center;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1.25rem;
+        font-weight: 500;
+        min-height: 3rem;
+        display: none; /* Hidden by default */
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    .speech-subtitle {
+        background-color: rgba(0, 123, 255, 0.6); /* Blueish */
+        color: white;
+    }
+    .sign-subtitle {
+        background-color: rgba(40, 167, 69, 0.6); /* Greenish */
+        color: white;
+    }
+</style>
+
+<!-- MediaPipe for Sign Detection in the call -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<!-- Socket.IO Client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+    const ROOM_ID = "{{ room_id }}";
+    const USER_ID = "{{ session.get('user_id', 'Guest') }}";
+</script>
+<script src="{{ url_for('static', filename='js/video_call.js') }}"></script>
+<script>
+    function copyLink() {
+        const copyText = document.getElementById("meetingLink");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        alert("Meeting link copied to clipboard!");
+    }
+</script>
+{% endblock %}
