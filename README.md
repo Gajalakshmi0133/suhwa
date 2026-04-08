@@ -56,10 +56,9 @@
 
 </p>
 
+## 📂 📁 Project Structure
 
-📁 Project Structure
-
-
+```bash
 Suhwa/
 │── backend/
 │   ├── models/
@@ -72,52 +71,61 @@ Suhwa/
 │── README.md
 
 
-⚙️ 🧩 Setup Guide
-🔹 Clone Repo
-git clone https://github.com/your-username/suhwa.git
-cd suhwa
+## 🌐 🚀 Deployment
 
-🔹 Virtual Environment
-python -m venv venv
-venv\Scripts\activate
+💡 Hosted using **Render**
 
-🔹 Install Requirements
-pip install -r requirements.txt
+✔ Push to GitHub  
+✔ Connect to Render  
+✔ Deploy instantly  
 
-🔹 Run App
-python app.py
+---
 
-🌐 🚀 Deployment
+## 🎯 🌍 Use Cases
 
-💡 Hosted using Render
+🔹 Accessibility for hearing-impaired  
+🔹 AI-based communication tools  
+🔹 Smart education systems  
+🔹 Real-world ML applications  
 
-✔ Push to GitHub
-✔ Connect to Render
-✔ Deploy instantly
+---
 
-🎯 🌍 Use Cases
+## 🔐 ⚖️ License
 
-🔹 Accessibility for hearing-impaired
-🔹 AI-based communication tools
-🔹 Smart education systems
-🔹 Real-world ML applications
+🚫 This project is **privately owned**.
 
-🔐 ⚖️ License
-
-🚫 This project is privately owned.
-
-© 2026 Gajalakshmi
+© 2026 **Gajalakshmi **  
 All Rights Reserved.
 
 ❗ Unauthorized copying, modification, or distribution is strictly prohibited.
 
-👩‍💻 💖 Author
-<h3 align="center">✨ Gajalakshmi✨</h3> <p align="center"> 🎓 B.Sc Computer Science Student <br/> 💡 AI | Web Dev | Innovation <br/> 🚀 Building real-world impactful projects </p>
-🌟 ⭐ Support
-<p align="center"> If you like this project ❤️ <br/> ⭐ Give it a star on GitHub ⭐ </p>
+---
 
-📬 📩 Contact
+## 👩‍💻 💖 Author
 
-📧 gaja03456@gmail.com
+<h3 align="center">✨ Gajalakshmi  ✨</h3>
 
-<h3 align="center">💜 Made with Passion & AI 💜</h3> 
+<p align="center">
+🎓 B.Sc Computer Science Student <br/>
+💡 AI | Web Dev | Innovation <br/>
+🚀 Building real-world impactful projects
+</p>
+
+---
+
+## 🌟 ⭐ Support
+
+<p align="center">
+If you like this project ❤️ <br/>
+⭐ Give it a star on GitHub ⭐
+</p>
+
+---
+
+## 📬 📩 Contact
+
+📧 gaja03456@gmail.com  
+
+---
+
+<h3 align="center">💜 Made with Passion & AI 💜</h3>
