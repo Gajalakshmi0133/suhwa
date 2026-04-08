@@ -70,7 +70,7 @@ Suhwa/
 │── requirements.txt
 │── README.md
 
-
+```
 ## 🌐 🚀 Deployment
 
 💡 Hosted using **Render**
