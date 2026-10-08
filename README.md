@@ -108,12 +108,11 @@ Gajalakshmi K
 B.Sc. Computer Science
 GitHub
 
-
 ### For your GitHub, I recommend adding these at the top
-
-```markdown
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-red)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-Machine%20Learning-orange)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-Hand%20Tracking-green)
+
+Suhwa is an AI-powered web application that uses computer vision and deep learning to recognize sign language gestures in real time and convert them into text.
